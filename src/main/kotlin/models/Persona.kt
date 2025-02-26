@@ -3,7 +3,7 @@ package srangeldev.models
 abstract class Persona(
     val id: Int = 0,
     val nombre: String,
-    val apellido: String,
+    val apellidos: String,
     val fechaNacimiento: String,
     val fechaIncorporacion: String,
     val salario: Double,
