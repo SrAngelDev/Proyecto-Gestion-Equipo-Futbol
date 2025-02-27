@@ -1,21 +1,20 @@
 package models
 
-import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
 import kotlin.test.assertEquals
 import java.time.LocalDate
-import srangeldev.models.Jugadores
+import srangeldev.models.Jugador
 
 
-class JugadoresTest {
+class JugadorTest {
 
     @Test
     @DisplayName("Posicion del jugador válida")
     fun getPosicion() {
         val jugador = crearJugador()
-        assertEquals(Jugadores.Posicion.DELANTERO, jugador.posicion)
+        assertEquals(Jugador.Posicion.DELANTERO, jugador.posicion)
     }
 
     @Test
@@ -53,10 +52,10 @@ class JugadoresTest {
         assertEquals(30, jugador.partidosJugados)
     }
 
-    private fun crearJugador(): Jugadores {
+    private fun crearJugador(): Jugador {
         val fechaNacimiento = LocalDate.of(1990, 6, 21)
         val fechaIncorporacion = LocalDate.of(2015, 8, 10)
-        return Jugadores(
+        return Jugador(
             id = 1,
             nombre = "Pedro",
             apellidos = "González",
@@ -64,7 +63,7 @@ class JugadoresTest {
             fechaIncorporacion = fechaIncorporacion,
             salario = 45000.0,
             paisOrigen = "España",
-            posicion = Jugadores.Posicion.DELANTERO,
+            posicion = Jugador.Posicion.DELANTERO,
             dorsal = 9,
             altura = 1.85,
             peso = 75.0,

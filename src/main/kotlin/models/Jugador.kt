@@ -2,7 +2,7 @@ package srangeldev.models
 
 import java.time.LocalDate
 
-class Jugadores(
+class Jugador(
     id: Int,
     nombre: String,
     apellidos: String,
