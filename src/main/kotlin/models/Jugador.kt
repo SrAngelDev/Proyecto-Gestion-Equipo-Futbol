@@ -2,7 +2,7 @@ package srangeldev.models
 
 import java.time.LocalDate
 
-class Jugadores(
+class Jugador(
     id: Int,
     nombre: String,
     apellidos: String,
@@ -16,7 +16,7 @@ class Jugadores(
     val peso: Double,
     val goles: Int,
     val partidosJugados: Int
-): Persona(id, nombre, apellidos, fechaNacimiento, fechaIncorporacion, salario, paisOrigen) {
+): Personal(id, nombre, apellidos, fechaNacimiento, fechaIncorporacion, salario, paisOrigen) {
     enum class Posicion {
         PORTERO, DEFENSA, CENTROCAMPISTA, DELANTERO
     }

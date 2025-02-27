@@ -2,7 +2,7 @@ package srangeldev.models
 
 import java.time.LocalDate
 
-abstract class Persona(
+abstract class Personal(
     val id: Int = 0,
     val nombre: String,
     val apellidos: String,

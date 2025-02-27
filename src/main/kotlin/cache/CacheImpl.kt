@@ -1,7 +1,7 @@
 package srangeldev.Cache
 
 class CacheImpl<K,V>(
-    private val capacidad: Int
+    private val capacidad: Int = 5
 ): Cache<K, V> {
     private val cache = object : LinkedHashMap<K, V>(
         capacidad, 0.75f,
