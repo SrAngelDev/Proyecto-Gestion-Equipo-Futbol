@@ -11,7 +11,7 @@ class Entrenador(
     salario: Double,
     paisOrigen: String,
     val especializacion: Especializacion
-): Persona(id, nombre, apellidos, fechaNacimiento, fechaIncorporacion, salario, paisOrigen) {
+): Personal(id, nombre, apellidos, fechaNacimiento, fechaIncorporacion, salario, paisOrigen) {
     enum class Especializacion {
         ENTRENADOR_PRINCIPAL, ENTRENADOR_ASISTENTE, ENTRENADOR_PORTEROS
     }

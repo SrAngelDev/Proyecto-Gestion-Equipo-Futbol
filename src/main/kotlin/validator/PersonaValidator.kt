@@ -1,21 +1,19 @@
 package srangeldev.validator
 
-import srangeldev.exceptions.PersonaException
-import srangeldev.models.Persona
+import srangeldev.exceptions.PersonalException
+import srangeldev.models.Personal
 
-fun Persona.validate(){
+fun Personal.validate(){
     if (id < 0) {
-        throw PersonaException.PersonaNotFoundException("Persona no encontrado con id: $id")
+        throw PersonalException.PersonalNotFoundException("Persona no encontrado con id: $id")
     }
     if (nombre.isEmpty() || apellidos.isEmpty()) {
-        throw  PersonaException.PersonaNotFoundException("Persona no encontrado con nombre: $nombre, apellidos: $apellidos")
+        throw  PersonalException.PersonalNotFoundException("Persona no encontrado con nombre: $nombre, apellidos: $apellidos")
     }
     if (salario > 0){
-        throw PersonaException.SalarioNotFoundException("Salario no puede ser menor o igual a 0")
+        throw PersonalException.SalarioNotFoundException("Salario no puede ser menor o igual a 0")
     }
     if (paisOrigen.isEmpty() || paisOrigen.isBlank()) {
-        throw PersonaException.PaisNotFoundException("Pais no puede ser nulo o en blanco")
+        throw PersonalException.PaisNotFoundException("Pais no puede ser nulo o en blanco")
     }
-
-
 }

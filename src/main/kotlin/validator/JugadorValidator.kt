@@ -1,10 +1,9 @@
 package srangeldev.validator
 
 import srangeldev.exceptions.JugadorException
-import srangeldev.models.Jugadores
-import srangeldev.models.Persona
+import srangeldev.models.Jugador
 
-fun Jugadores.validate(){
+fun Jugador.validate(){
     if (posicion == null){
         throw JugadorException.JugadorPosicionException("la posicion no debe ser nula")
     }
