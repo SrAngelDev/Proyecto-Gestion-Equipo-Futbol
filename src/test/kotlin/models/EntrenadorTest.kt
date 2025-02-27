@@ -53,4 +53,32 @@ class EntrenadorTest {
         assertEquals(Entrenador.Especializacion.ENTRENADOR_ASISTENTE, entrenador.especializacion)
     }
 
+    @Test
+    @DisplayName("Prueba de desigualdad entre dos entrenadores")
+    fun testEntrenadorInequality() {
+        val fechaNacimiento = LocalDate.of(1980, 5, 15)
+        val fechaIncorporacion = LocalDate.of(2020, 1, 10)
+        val entrenador1 = Entrenador(
+            id = 1,
+            nombre = "Juan",
+            apellidos = "Pérez",
+            fechaNacimiento = fechaNacimiento,
+            fechaIncorporacion = fechaIncorporacion,
+            salario = 50000.0,
+            paisOrigen = "España",
+            especializacion = Entrenador.Especializacion.ENTRENADOR_PRINCIPAL
+        )
+        val entrenador2 = Entrenador(
+            id = 2,
+            nombre = "Carlos",
+            apellidos = "Gómez",
+            fechaNacimiento = fechaNacimiento,
+            fechaIncorporacion = fechaIncorporacion,
+            salario = 60000.0,
+            paisOrigen = "Argentina",
+            especializacion = Entrenador.Especializacion.ENTRENADOR_ASISTENTE
+        )
+
+        assertNotEquals(entrenador1, entrenador2)
+    }
 }
