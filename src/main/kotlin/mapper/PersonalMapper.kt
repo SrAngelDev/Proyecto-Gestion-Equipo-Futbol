@@ -5,6 +5,41 @@ import srangeldev.models.Entrenador
 import srangeldev.models.Jugador
 import java.time.LocalDate
 
+//toDto
+
+fun Entrenador.toDto(it): PersonalDto {
+    return PersonalDto(
+        id = this.id,
+        nombre = this.nombre,
+        apellidos = this.apellidos,
+        fechaNacimiento = this.fechaNacimiento.toString(),
+        fechaIncorporacion = this.fechaIncorporacion.toString(),
+        salario = this.salario,
+        paisOrigen = this.paisOrigen,
+        especializacion = this.especializacion.toString()
+    )
+}
+
+fun Jugador.toDto(it): PersonalDto {
+    return PersonalDto(
+        id = this.id,
+        nombre = this.nombre,
+        apellidos = this.apellidos,
+        fechaNacimiento = this.fechaNacimiento.toString(),
+        fechaIncorporacion = this.fechaIncorporacion.toString(),
+        salario = this.salario,
+        paisOrigen = this.paisOrigen,
+        posicion = this.posicion.toString(),
+        dorsal = this.dorsal,
+        altura = this.altura,
+        peso = this.peso,
+        goles = this.goles,
+        partidosJugados = this.partidosJugados
+    )
+}
+
+//toModel
+
 fun PersonalDto.toEntrenador(): Entrenador {
     return Entrenador(
         id = this.id,
