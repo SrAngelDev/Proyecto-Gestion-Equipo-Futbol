@@ -7,7 +7,7 @@ import java.time.LocalDate
 
 //toDto
 
-fun Entrenador.toDto(it): PersonalDto {
+fun Entrenador.toDto(): PersonalDto {
     return PersonalDto(
         id = this.id,
         nombre = this.nombre,
@@ -20,7 +20,7 @@ fun Entrenador.toDto(it): PersonalDto {
     )
 }
 
-fun Jugador.toDto(it): PersonalDto {
+fun Jugador.toDto(): PersonalDto {
     return PersonalDto(
         id = this.id,
         nombre = this.nombre,

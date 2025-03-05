@@ -16,10 +16,10 @@ data class PersonalDto(
     @SerialName("apellidos")
     val apellidos: String = "",
     @XmlElement
-    @SerialName("fecha_nacimiento")
+    @SerialName("fechaNacimiento")
     val fechaNacimiento: String = "",
     @XmlElement
-    @SerialName("fecha_incorporacion")
+    @SerialName("fechaIncorporacion")
     val fechaIncorporacion: String = "",
     @XmlElement
     @SerialName("salario")
@@ -34,8 +34,11 @@ data class PersonalDto(
     @SerialName("especialidad")
     val especializacion: String = "",
     @XmlElement
+    @SerialName("tipo")
+    val tipo: String = "",
+    @XmlElement
     @SerialName("posicion")
-    val posicion: String = "",
+    val posicion: String? = null,
     @XmlElement
     @SerialName("dorsal")
     val dorsal: Int? = null,
@@ -49,6 +52,6 @@ data class PersonalDto(
     @SerialName("goles")
     val goles: Int? = null,
     @XmlElement
-    @SerialName("partidos_jugados")
+    @SerialName("partidosJugados")
     val partidosJugados: Int? = null,
 )
