@@ -7,7 +7,7 @@ package srangeldev.exceptions
  */
 sealed class PersonalException(message: String) : Exception(message) {
     class PersonalNotFoundException(id: String) : PersonalException("Persona no encontrada con id: $id")
-    class SalarioNotFoundException(message: String) : PersonalException("el salario no puede ser menor o igual a 0")
-    class PaisNotFoundException(message: String) : PersonalException("el pais no puede ser nulo ni en blanco")
+    class SalarioNotFoundException(message: String) : PersonalException("Error en el salario: $message")
+    class PaisNotFoundException(message: String) : PersonalException("Error en el pais: $message")
     class PersonalStorageException(message: String) : PersonalException("Error en el almacenamiento: $message")
 }
