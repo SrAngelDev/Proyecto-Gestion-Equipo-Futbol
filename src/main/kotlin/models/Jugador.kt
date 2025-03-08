@@ -18,6 +18,9 @@ class Jugador(
     val partidosJugados: Int
 ): Personal(id, nombre, apellidos, fechaNacimiento, fechaIncorporacion, salario, paisOrigen) {
     enum class Posicion {
-        PORTERO, DEFENSA, CENTROCAMPISTA, DELANTERO
+        PORTERO,
+        DEFENSA,
+        CENTROCAMPISTA,
+        DELANTERO
     }
 }
