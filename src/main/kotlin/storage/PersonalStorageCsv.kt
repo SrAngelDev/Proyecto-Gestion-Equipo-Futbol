@@ -52,7 +52,7 @@ class PersonalStorageCsv : PersonalStorageFile {
                         fechaIncorporacion = LocalDate.parse(it[5]),
                         salario = it[6].toDouble(),
                         paisOrigen = it[7],
-                        posicion = Jugador.Posicion.valueOf(it[8].trim().uppercase()), // Convertir a mayúsculas
+                        posicion = Jugador.Posicion.valueOf(it[8].trim().uppercase()),
                         dorsal = it[9].toInt(),
                         altura = it[10].toDouble(),
                         peso = it[11].toDouble(),
@@ -93,7 +93,7 @@ class PersonalStorageCsv : PersonalStorageFile {
                             "${personal.fechaIncorporacion}," +
                             "${personal.salario}," +
                             "${personal.paisOrigen}," +
-                            "${personal.especializacion},,,,,"
+                            "${personal.especializacion},,,,," // Campos vacíos
                 }
                 is Jugador -> {
                     "Jugador," +
