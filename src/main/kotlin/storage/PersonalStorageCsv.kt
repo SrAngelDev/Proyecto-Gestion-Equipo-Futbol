@@ -16,12 +16,6 @@ class PersonalStorageCsv : PersonalStorageFile {
         logger.debug { "Inicializando almacenamiento de personal en formato CSV" }
     }
 
-    /**
-     * Lee el personal de un fichero CSV
-     * @param file Fichero CSV
-     * @return Lista de personal
-     * @throws PersonalException.PersonalStorageException Si el fichero no existe, no es un fichero o no se puede leer
-     */
     override fun readFromFile(file: File): List<Personal> {
         logger.debug { "Leyendo personal de fichero CSV: $file" }
         if (!file.exists() || !file.isFile || !file.canRead() || file.length() == 0L || !file.name.endsWith(".csv", true)) {
@@ -33,6 +27,9 @@ class PersonalStorageCsv : PersonalStorageFile {
             .map { it.split(",") }
             .map { it.map { it.trim() } }
             .map {
+                println("Tokens: $it")
+                val posicionCadena = it[8].trim().uppercase()
+                println("Cadena de posición leída: '$posicionCadena'")
                 when (it[0]) {
                     "Entrenador" -> Entrenador(
                         id = it[1].toInt(),
@@ -52,7 +49,7 @@ class PersonalStorageCsv : PersonalStorageFile {
                         fechaIncorporacion = LocalDate.parse(it[5]),
                         salario = it[6].toDouble(),
                         paisOrigen = it[7],
-                        posicion = Jugador.Posicion.valueOf(it[8].trim().uppercase()),
+                        posicion = Jugador.Posicion.valueOf(posicionCadena),
                         dorsal = it[9].toInt(),
                         altura = it[10].toDouble(),
                         peso = it[11].toDouble(),
@@ -64,12 +61,7 @@ class PersonalStorageCsv : PersonalStorageFile {
             }
     }
 
-    /**
-     * Escribe el personal en un fichero CSV
-     * @param file Fichero CSV
-     * @param personalList Lista de personal
-     * @throws PersonalException.PersonalStorageException Si el directorio padre del fichero no existe
-     */
+
     override fun writeToFile(file: File, personalList: List<Personal>) {
         logger.debug { "Escribiendo personal en fichero CSV: $file" }
 
