@@ -1,5 +1,8 @@
 package srangeldev
 
+import srangeldev.view.View
+
 fun main() {
-    println("Hello World!")
+    val view = View()
+    view.showMenu()
 }
