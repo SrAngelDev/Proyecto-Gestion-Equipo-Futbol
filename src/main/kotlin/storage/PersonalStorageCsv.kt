@@ -7,7 +7,6 @@ import srangeldev.models.Jugador
 import srangeldev.models.Personal
 import java.io.File
 import java.time.LocalDate
-import java.util.*
 
 class PersonalStorageCsv : PersonalStorageFile {
     private val logger = logging()
@@ -27,9 +26,7 @@ class PersonalStorageCsv : PersonalStorageFile {
             .map { it.split(",") }
             .map { it.map { it.trim() } }
             .map {
-                println("Tokens: $it")
-                val posicionCadena = it[8].trim().uppercase()
-                println("Cadena de posición leída: '$posicionCadena'")
+
                 when (it[0]) {
                     "Entrenador" -> Entrenador(
                         id = it[1].toInt(),
@@ -49,7 +46,7 @@ class PersonalStorageCsv : PersonalStorageFile {
                         fechaIncorporacion = LocalDate.parse(it[5]),
                         salario = it[6].toDouble(),
                         paisOrigen = it[7],
-                        posicion = Jugador.Posicion.valueOf(posicionCadena),
+                        posicion = Jugador.Posicion.valueOf(it[8].trim().uppercase()),
                         dorsal = it[9].toInt(),
                         altura = it[10].toDouble(),
                         peso = it[11].toDouble(),
