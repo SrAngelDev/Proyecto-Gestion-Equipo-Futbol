@@ -1,9 +1,11 @@
 package srangeldev.view
 
 import org.lighthousegames.logging.logging
+import srangeldev.controller.Controller
 
 class View {
     private val logger = logging()
+    private val controller = Controller()
 
     fun showMenu() {
         println("Bienvenido a la aplicación de Entrenadores")
@@ -32,26 +34,32 @@ class View {
 
     fun cargarDatos() {
         logger.debug { "Cargando datos" }
+        controller.cargarDatos()
     }
 
     fun crearMiembro() {
         logger.debug { "Creando miembro" }
+        controller.crearMiembro()
     }
 
     fun actualizarMiembro() {
         logger.debug { "Actualizando miembro" }
+        controller.actualizarMiembro()
     }
 
     fun eliminarMiembro() {
         logger.debug { "Eliminando miembro" }
+        controller.eliminarMiembro()
     }
 
     fun copiarDatos() {
         logger.debug { "Copiando datos" }
+        controller.copiarDatos()
     }
 
     fun realizarConsultas() {
         logger.debug { "Realizando consultas" }
+        controller.realizarConsultas()
     }
 
     fun salir() {
