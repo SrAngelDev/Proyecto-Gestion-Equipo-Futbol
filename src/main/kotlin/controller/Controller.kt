@@ -195,6 +195,7 @@ class Controller {
      */
     fun realizarConsultas() {
         logger.debug { "Realizando consultas" }
+        println("Realizando consultas")
     }
 
     /**
