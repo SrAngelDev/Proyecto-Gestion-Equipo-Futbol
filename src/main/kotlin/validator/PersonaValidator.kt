@@ -3,6 +3,9 @@ package srangeldev.validator
 import srangeldev.exceptions.PersonalException
 import srangeldev.models.Personal
 
+/**
+ * Funcion para validar los datos del personal.
+ */
 fun Personal.validate() {
     if (id < 0) {
         throw PersonalException.PersonalNotFoundException(id)

@@ -2,6 +2,9 @@ package srangeldev.models
 
 import java.time.LocalDate
 
+/**
+ * Clase abstracta que representa a un miembro del personal.
+ */
 abstract class Personal(
     val id: Int = 0,
     val nombre: String,

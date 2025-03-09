@@ -2,6 +2,9 @@ package srangeldev.models
 
 import java.time.LocalDate
 
+/**
+ * Clase que representa a un jugador.
+ */
 class Entrenador(
     id: Int,
     nombre: String,

@@ -9,6 +9,9 @@ import java.io.File
 import java.io.RandomAccessFile
 import java.time.LocalDate
 
+/**
+ * Clase que implementa la interfaz PersonalStorageFile para el almacenamiento de datos de personal en formato Bin.
+ */
 class PersonalStorageBin : PersonalStorageFile {
     private val logger = logging()
 
@@ -17,18 +20,15 @@ class PersonalStorageBin : PersonalStorageFile {
     }
 
     /**
-     * Lee el personal de un fichero Bin
-     * @param file Fichero Bin
-     * @return Lista de personal
-     * @throws PersonalException.PersonalStorageException, Si el fichero no existe, no es un fichero o no se puede leer
+     * Lee una lista de objetos Personal desde un archivo Bin.
+     *
+     * @param file El archivo Bin desde el cual leer los datos.
+     * @return Una lista de objetos Personal leídos desde el archivo Bin.
+     * @throws PersonalException.PersonalStorageException Si el archivo no existe, no es un archivo, no se puede leer, está vacío o no tiene extensión Bin.
      */
     override fun readFromFile(file: File): List<Personal> {
         logger.debug { "Leyendo personal de fichero Bin: $file" }
-        if (!file.exists() || !file.isFile || !file.canRead() || file.length() == 0L || !file.name.endsWith(
-                ".bin",
-                true
-            )
-        ) {
+        if (!file.exists() || !file.isFile || !file.canRead() || file.length() == 0L || !file.name.endsWith(".bin", true)) {
             logger.error { "El fichero no existe, o no es un fichero o no se puede leer: $file" }
             throw PersonalException.PersonalStorageException("El fichero no existe, o no es un fichero o no se puede leer: $file")
         }
@@ -83,10 +83,11 @@ class PersonalStorageBin : PersonalStorageFile {
     }
 
     /**
-     * Escribe el personal en un fichero Bin
-     * @param file Fichero bin
-     * @param personalList Lista de personal
-     * @throws PersonalException.PersonalStorageException Si el directorio padre del fichero no existe
+     * Escribe una lista de objetos Personal en un archivo Bin.
+     *
+     * @param file El archivo Bin en el cual escribir los datos.
+     * @param personalList La lista de objetos Personal a escribir en el archivo Bin.
+     * @throws PersonalException.PersonalStorageException Si el directorio padre del archivo no existe, no es un directorio o el archivo no tiene extensión Bin.
      */
     override fun writeToFile(file: File, personalList: List<Personal>) {
         logger.debug { "Escribiendo personal en fichero Bin: $file" }

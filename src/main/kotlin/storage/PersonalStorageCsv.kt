@@ -8,6 +8,9 @@ import srangeldev.models.Personal
 import java.io.File
 import java.time.LocalDate
 
+/**
+ * Clase que implementa la interfaz PersonalStorageFile para el almacenamiento de datos de personal en formato CSV.
+ */
 class PersonalStorageCsv : PersonalStorageFile {
     private val logger = logging()
 
@@ -15,6 +18,13 @@ class PersonalStorageCsv : PersonalStorageFile {
         logger.debug { "Inicializando almacenamiento de personal en formato CSV" }
     }
 
+    /**
+     * Lee una lista de objetos Personal desde un archivo CSV.
+     *
+     * @param file El archivo CSV desde el cual leer los datos.
+     * @return Una lista de objetos Personal leídos desde el archivo CSV.
+     * @throws PersonalException.PersonalStorageException Si el archivo no existe, no es un archivo, no se puede leer, está vacío o no tiene extensión CSV.
+     */
     override fun readFromFile(file: File): List<Personal> {
         logger.debug { "Leyendo personal de fichero CSV: $file" }
         if (!file.exists() || !file.isFile || !file.canRead() || file.length() == 0L || !file.name.endsWith(".csv", true)) {
@@ -26,7 +36,6 @@ class PersonalStorageCsv : PersonalStorageFile {
             .map { it.split(",") }
             .map { it.map { it.trim() } }
             .map {
-
                 when (it[0]) {
                     "Entrenador" -> Entrenador(
                         id = it[1].toInt(),
@@ -58,7 +67,13 @@ class PersonalStorageCsv : PersonalStorageFile {
             }
     }
 
-
+    /**
+     * Escribe una lista de objetos Personal en un archivo CSV.
+     *
+     * @param file El archivo CSV en el cual escribir los datos.
+     * @param personalList La lista de objetos Personal a escribir en el archivo CSV.
+     * @throws PersonalException.PersonalStorageException Si el directorio padre del archivo no existe, no es un directorio o el archivo no tiene extensión CSV.
+     */
     override fun writeToFile(file: File, personalList: List<Personal>) {
         logger.debug { "Escribiendo personal en fichero CSV: $file" }
 

@@ -5,8 +5,9 @@ import srangeldev.models.Entrenador
 import srangeldev.models.Jugador
 import java.time.LocalDate
 
-//toDto
-
+/**
+ * Función de mapeo de entrenador a dto.
+ */
 fun Entrenador.toDto(): PersonalDto {
     return PersonalDto(
         id = this.id,
@@ -20,6 +21,9 @@ fun Entrenador.toDto(): PersonalDto {
     )
 }
 
+/**
+ * Función de mapeo de jugador a dto.
+ */
 fun Jugador.toDto(): PersonalDto {
     return PersonalDto(
         id = this.id,
@@ -38,8 +42,9 @@ fun Jugador.toDto(): PersonalDto {
     )
 }
 
-//toModel
-
+/**
+ * Función de mapeo de dto a entrenador.
+ */
 fun PersonalDto.toEntrenador(): Entrenador {
     return Entrenador(
         id = this.id,
@@ -53,6 +58,9 @@ fun PersonalDto.toEntrenador(): Entrenador {
     )
 }
 
+/**
+ * Función de mapeo de dto a jugador.
+ */
 fun PersonalDto.toJugador(): Jugador {
     return Jugador(
         id = this.id,

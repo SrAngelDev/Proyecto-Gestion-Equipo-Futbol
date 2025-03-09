@@ -15,6 +15,9 @@ import java.io.File
 
 private const val CACHE_SIZE = 5
 
+/**
+ * Clase que implementa el servicio de gestión de personal.
+ */
 class PersonalServiceImpl(
     private val storage: PersonalStorage = PersonalStorageImpl(),
     private val repository: PersonalRepository = PersonalRespositoryImpl(),

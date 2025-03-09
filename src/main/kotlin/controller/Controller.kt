@@ -6,15 +6,24 @@ import srangeldev.models.Jugador
 import srangeldev.service.PersonalServiceImpl
 import java.time.LocalDate
 
+/**
+ * Controlador principal para gestionar las operaciones relacionadas con el personal.
+ */
 class Controller {
     private val logger = logging()
     private val service = PersonalServiceImpl()
 
+    /**
+     * Carga los datos desde un archivo.
+     */
     fun cargarDatos() {
         logger.debug { "Cargando datos" }
         service.importFromFile("data/personal.json")
     }
 
+    /**
+     * Crea un nuevo miembro del personal, ya sea entrenador o jugador.
+     */
     fun crearMiembro() {
         logger.debug { "Creando miembro" }
         println("Quieres crear entrenador o jugador?")
@@ -25,6 +34,9 @@ class Controller {
         }
     }
 
+    /**
+     * Crea un nuevo entrenador.
+     */
     private fun crearEntrenador() {
         val id = 0
         println("Introduce el nombre del entrenador")
@@ -45,6 +57,9 @@ class Controller {
         service.save(entrenador)
     }
 
+    /**
+     * Crea un nuevo jugador.
+     */
     private fun crearJugador() {
         val id = 0
         println("Introduce el nombre del jugador")
@@ -75,6 +90,9 @@ class Controller {
         service.save(jugador)
     }
 
+    /**
+     * Actualiza los datos de un miembro del personal.
+     */
     fun actualizarMiembro() {
         logger.debug { "Actualizando miembro" }
         println("Introduce el id del miembro a actualizar")
@@ -87,6 +105,11 @@ class Controller {
         }
     }
 
+    /**
+     * Actualiza un jugador.
+     *
+     * @return El jugador actualizado.
+     */
     private fun actualizarJugador(): Jugador {
         logger.debug { "Actualizando jugador" }
         println("Introduce el nombre del jugador")
@@ -117,6 +140,11 @@ class Controller {
         return service.update(jugador.id, jugador) as Jugador
     }
 
+    /**
+     * Actualiza un entrenador.
+     *
+     * @return El entrenador actualizado.
+     */
     private fun actualizarEntrenador(): Entrenador {
         logger.debug { "Actualizando entrenador" }
         println("Introduce el nombre del entrenador")
@@ -137,6 +165,9 @@ class Controller {
         return service.update(entrenador.id, entrenador) as Entrenador
     }
 
+    /**
+     * Elimina un miembro del personal.
+     */
     fun eliminarMiembro() {
         logger.debug { "Eliminando miembro" }
         println("Introduce el id del miembro a eliminar")
@@ -151,15 +182,26 @@ class Controller {
         }
     }
 
+    /**
+     * Copia los datos a un archivo.
+     */
     fun copiarDatos() {
         logger.debug { "Copiando datos" }
         service.exportToFile("data/personal.json")
     }
 
+    /**
+     * Realiza consultas sobre los datos del personal.
+     */
     fun realizarConsultas() {
         logger.debug { "Realizando consultas" }
     }
 
+    /**
+     * Lee una fecha desde la entrada estándar.
+     *
+     * @return La fecha leída.
+     */
     fun leerFecha(): LocalDate {
         println("Introduce el día")
         val dia = readln().toInt()
@@ -170,6 +212,11 @@ class Controller {
         return LocalDate.of(año, mes, dia)
     }
 
+    /**
+     * Lee la especialización de un entrenador desde la entrada estándar.
+     *
+     * @return La especialización leída.
+     */
     fun leerEspecializacion(): Entrenador.Especializacion {
         println("Introduce la especialización (principal, asistente, porteros)")
         return when (readln().uppercase()) {
@@ -180,6 +227,11 @@ class Controller {
         }
     }
 
+    /**
+     * Lee la posición de un jugador desde la entrada estándar.
+     *
+     * @return La posición leída.
+     */
     fun leerPosicion(): Jugador.Posicion {
         println("Introduce la posición (portero, defensa, centrocampista, delantero)")
         return when (readln().uppercase()) {
