@@ -132,6 +132,6 @@ class PersonalStorageBinTest {
   val exception = assertThrows<PersonalException.PersonalStorageException> {
    storage.writeToFile(invalidFile, listOf(jugador))
   }
-  assertEquals("El directorio padre del fichero no existe: non_existing_directory", exception.message)
+  assertEquals("Error en el almacenamiento: El directorio padre del fichero no existe: non_existing_directory", exception.message)
  }
 }

@@ -91,10 +91,14 @@ class PersonalStorageBin : PersonalStorageFile {
      */
     override fun writeToFile(file: File, personalList: List<Personal>) {
         logger.debug { "Escribiendo personal en fichero Bin: $file" }
+
         val parentFile = file.parentFile
         if (parentFile == null || !parentFile.exists() || !parentFile.isDirectory || !file.name.endsWith(".bin", true)) {
             logger.error { "El directorio padre del fichero no existe: ${parentFile?.absolutePath}" }
-            throw PersonalException.PersonalStorageException("El directorio padre del fichero no existe: ${parentFile?.absolutePath}")
+            val parentDir = file.parentFile
+            if (parentDir == null || !parentDir.exists()) {
+                throw PersonalException.PersonalStorageException("El directorio padre del fichero no existe: ${parentDir?.name}")
+            }
         }
 
         RandomAccessFile(file, "rw").use { raf ->
