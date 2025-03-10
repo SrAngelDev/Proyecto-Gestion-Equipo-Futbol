@@ -7,7 +7,6 @@ import nl.adaptivity.xmlutil.serialization.XmlElement
 @Serializable
 data class PersonalXmlDto(
     @SerialName("id")
-    @XmlElement(true)
     val id: Int,
     @SerialName("nombre")
     @XmlElement(true)

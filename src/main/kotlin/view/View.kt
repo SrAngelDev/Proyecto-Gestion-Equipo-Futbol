@@ -1,6 +1,7 @@
 package srangeldev.view
 
 import org.lighthousegames.logging.logging
+import srangeldev.config.Config
 import srangeldev.controller.Controller
 
 /**
@@ -35,7 +36,6 @@ class View {
                 4 -> eliminarMiembro()
                 5 -> copiarDatos()
                 6 -> realizarConsultas()
-                7 -> salir()
                 else -> println("Opción no válida.")
             }
         } while (opcion != 7)
@@ -46,7 +46,47 @@ class View {
      */
     fun cargarDatos() {
         logger.debug { "Cargando datos" }
-        controller.cargarDatos()
+        println("De qué formato quieres cargar los datos?")
+        var opcion: Int
+        do {
+            println("1. CSV")
+            println("2. XML")
+            println("3. JSON")
+            println("4. Salir.")
+
+            print("Seleccione una opción: ")
+            opcion = readln().toInt()
+
+            when(opcion) {
+                1 -> cargarDatosCsv()
+                2 -> cargarDatosXml()
+                3 -> cargarDatosJson()
+                else -> println("Opción no válida.")
+            }
+        } while (opcion != 4)
+    }
+
+    private fun cargarDatosCsv() {
+        logger.debug { "Cargando datos CSV" }
+        controller.cargarDatos("CSV")
+    }
+
+    private fun cargarDatosXml() {
+        logger.debug { "Cargando datos XML" }
+        controller.cargarDatos("XML")
+    }
+
+    private fun cargarDatosJson() {
+        logger.debug { "Cargando datos JSON" }
+        controller.cargarDatos("JSON")
+    }
+
+    /**
+     * Manda al controlador copiar los datos.
+     */
+    fun copiarDatos() {
+        logger.debug { "Copiando datos" }
+        controller.copiarDatos()
     }
 
     /**
@@ -73,13 +113,8 @@ class View {
         controller.eliminarMiembro()
     }
 
-    /**
-     * Manda al controlador copiar los datos.
-     */
-    fun copiarDatos() {
-        logger.debug { "Copiando datos" }
-        controller.copiarDatos()
-    }
+
+
 
     /**
      * Manda al controlador realizar consultas.
@@ -87,13 +122,5 @@ class View {
     fun realizarConsultas() {
         logger.debug { "Realizando consultas" }
         controller.realizarConsultas()
-    }
-
-    /**
-     * Muestra un mensaje de salida.
-     */
-    fun salir() {
-        logger.debug { "Saliendo de la aplicación" }
-        println("Saliendo de la aplicación")
     }
 }

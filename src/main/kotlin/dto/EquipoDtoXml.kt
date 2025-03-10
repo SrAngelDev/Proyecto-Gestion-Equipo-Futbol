@@ -2,6 +2,7 @@ package srangeldev.dto
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import nl.adaptivity.xmlutil.serialization.XmlElement
 
 /**
  * Data class que representa un equipo de personal.
@@ -10,6 +11,8 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 @SerialName("equipo")
-data class EquipoDto(
-    val equipo: List<PersonalCsvDto>
+data class EquipoDtoXml(
+    @SerialName("personal")
+    @XmlElement(true)
+    val equipo: List<PersonalXmlDto>
 )

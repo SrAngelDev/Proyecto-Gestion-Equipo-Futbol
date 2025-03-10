@@ -30,6 +30,8 @@ object Config {
         // Obtiene las propiedades, proporcionando valores por defecto si no se encuentran
         val dataDirProperty = properties.getProperty("data.directory") ?: "data"
         val backupDirProperty = properties.getProperty("backup.directory") ?: "backup"
+        val inputFormatsProperty = properties.getProperty("input.formats") ?: "CSV,XML,JSON,BIN"
+        val outputFormatsProperty = properties.getProperty("output.formats") ?: "CSV,XML,JSON,BIN"
 
         // Obtiene los directorios de datos y backup
         val dataDir = Path.of(directorioActual, dataDirProperty).pathString
@@ -38,7 +40,7 @@ object Config {
         // Cremos las capretas si no existen
         makeProgramDirectories(dataDir, backupDir)
 
-        return ConfigProperties(dataDir, backupDir)
+        return ConfigProperties(dataDir, backupDir, inputFormatsProperty, outputFormatsProperty)
     }
 
     /**
@@ -50,10 +52,14 @@ object Config {
             val dir = java.io.File(it)
             log.debug { "Creando directorio: $it" }
             Files.createDirectories(dir.toPath()) // Crea el directorio si no existe
-
         }
     }
 
     // Clase para encapsular las propiedades de la configuración, y valores por defecto
-    data class ConfigProperties(val dataDir: String = "data", val backupDir: String = "backup")
+    data class ConfigProperties(
+        val dataDir: String = "data",
+        val backupDir: String = "backup",
+        val inputFormats: String = "CSV,XML,JSON,BIN",
+        val outputFormats: String = "CSV,XML,JSON,BIN"
+    )
 }

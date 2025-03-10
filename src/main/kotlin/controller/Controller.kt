@@ -2,10 +2,12 @@ package srangeldev.controller
 
 import Consultas
 import org.lighthousegames.logging.logging
+import srangeldev.config.Config
 import srangeldev.models.Entrenador
 import srangeldev.models.Jugador
 import srangeldev.service.PersonalServiceImpl
 import srangeldev.storage.FileFormat
+import java.nio.file.Paths
 import java.time.LocalDate
 
 /**
@@ -15,21 +17,32 @@ class Controller {
     private val logger = logging()
     private val service = PersonalServiceImpl()
 
-    /**
-     * Carga los datos desde un archivo.
-     */
-    fun cargarDatos() {
+    // En la función cargarDatos
+
+    fun cargarDatos(formato: String) {
         logger.debug { "Cargando datos" }
-        service.importFromFile("data/personal.json", FileFormat.JSON)
+        val dataDir = Paths.get(Config.configProperties.dataDir).toAbsolutePath().toString()
+        val fileName = when (formato) {
+            "CSV" -> "personal.csv"
+            "XML" -> "personal.xml"
+            "JSON" -> "personal.json"
+            else -> throw IllegalArgumentException("Formato no soportado: $formato")
+        }
+        val filePath = Paths.get(dataDir, fileName).toString()
+        val inputFormat = FileFormat.valueOf(formato.trim())
+        service.importFromFile(filePath, inputFormat)
     }
 
-    /**
-     * Copia los datos a un archivo.
-     */
+    // En la función copiarDatos
     fun copiarDatos() {
         logger.debug { "Copiando datos" }
-        service.exportToFile("data/personal_back.json", FileFormat.JSON)
+        val outputFormats = Config.configProperties.outputFormats.split(",") // Corregido: outputFormats
+        outputFormats.forEach { formato ->
+            val outputFormat = FileFormat.valueOf(formato.trim())
+            service.exportToFile(Config.configProperties.dataDir, outputFormat) // Corregido: dataDir
+        }
     }
+
 
     /**
      * Crea un nuevo miembro del personal, ya sea entrenador o jugador.

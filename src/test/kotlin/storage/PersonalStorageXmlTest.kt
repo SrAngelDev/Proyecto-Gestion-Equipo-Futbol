@@ -4,7 +4,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.io.TempDir
-import srangeldev.dto.EquipoDto
+import srangeldev.dto.EquipoDtoCsv
 import srangeldev.exceptions.PersonalException
 import srangeldev.models.Entrenador
 import srangeldev.storage.PersonalStorageXml
@@ -48,7 +48,7 @@ class PersonalStorageXmlTest {
 
         val xmlString = file.readText()
 
-        val personalDto: EquipoDto = xml.decodeFromString(EquipoDto.serializer(), xmlString)
+        val personalDto: EquipoDtoCsv = xml.decodeFromString(EquipoDtoCsv.serializer(), xmlString)
 
         assertEquals(1, personalDto.equipo.size)
         assertEquals("Angel", personalDto.equipo[0].nombre)

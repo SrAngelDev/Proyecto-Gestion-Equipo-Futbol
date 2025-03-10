@@ -3,11 +3,13 @@ package srangeldev.storage
 import nl.adaptivity.xmlutil.serialization.XML
 import org.lighthousegames.logging.logging
 import srangeldev.dto.PersonalCsvDto
-import srangeldev.dto.EquipoDto
+import srangeldev.dto.EquipoDtoXml
+import srangeldev.dto.PersonalXmlDto
 import srangeldev.exceptions.PersonalException
 import srangeldev.mapper.toCsvDto
 import srangeldev.mapper.toEntrenador
 import srangeldev.mapper.toJugador
+import srangeldev.mapper.toXmlDto
 import srangeldev.models.Entrenador
 import srangeldev.models.Jugador
 import srangeldev.models.Personal
@@ -40,7 +42,7 @@ class PersonalStorageXml : PersonalStorageFile {
         }
         val xml = XML {}
         val xmlString = file.readText()
-        val personalDto: EquipoDto = xml.decodeFromString(EquipoDto.serializer(), xmlString)
+        val personalDto: EquipoDtoXml = xml.decodeFromString(EquipoDtoXml.serializer(), xmlString)
         val personalListDto = personalDto.equipo
         return personalListDto.map {
             when (it.rol) {
@@ -65,14 +67,14 @@ class PersonalStorageXml : PersonalStorageFile {
             throw PersonalException.PersonalStorageException("El directorio padre del fichero no existe o no es un directorio o el fichero no tiene extensión XML: ${file.parentFile.absolutePath}")
         }
         val xml = XML {}
-        val personalListDto: List<PersonalCsvDto> = personalList.map {
+        val personalListDto: List<PersonalXmlDto> = personalList.map {
             when (it) {
-                is Entrenador -> it.toCsvDto()
-                is Jugador -> it.toCsvDto()
+                is Entrenador -> it.toXmlDto()
+                is Jugador -> it.toXmlDto()
                 else -> throw IllegalArgumentException("Tipo de Personal desconocido")
             }
         }
-        val personalDto = EquipoDto(equipo = personalListDto)
-        file.writeText(xml.encodeToString(EquipoDto.serializer(), personalDto))
+        val personalDto = EquipoDtoXml(equipo = personalListDto)
+        file.writeText(xml.encodeToString(EquipoDtoXml.serializer(), personalDto))
     }
 }

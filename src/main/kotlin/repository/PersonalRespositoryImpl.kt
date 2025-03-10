@@ -1,6 +1,7 @@
 package srangeldev.repository
 
 import org.lighthousegames.logging.logging
+import srangeldev.dto.PersonalXmlDto
 import srangeldev.models.Entrenador
 import srangeldev.models.Jugador
 import srangeldev.models.Personal
@@ -10,7 +11,7 @@ import srangeldev.models.Personal
  */
 class PersonalRespositoryImpl : PersonalRepository {
     private val logger = logging()
-    private val personal = mutableMapOf<Int, Personal>()
+    private val personal = mutableListOf<Personal>()
     private var nextId = 1
 
     init {
