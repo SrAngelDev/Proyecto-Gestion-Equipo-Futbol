@@ -2,7 +2,7 @@ import srangeldev.models.Entrenador
 import srangeldev.models.Jugador
 import srangeldev.service.PersonalServiceImpl
 
-class Consultas(private val service: PersonalServiceImpl) {
+class Consultas(private val service: PersonalServiceImpl = PersonalServiceImpl()) {
 
     fun realizarConsultas() {
         println("Realizando consultas...")

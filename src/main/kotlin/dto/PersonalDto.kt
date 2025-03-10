@@ -3,6 +3,7 @@ package srangeldev.dto
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import nl.adaptivity.xmlutil.serialization.XmlElement
+import nl.adaptivity.xmlutil.serialization.XmlOtherAttributes
 
 /**
  * Data class que representa un objeto de transferencia de datos (DTO) para el personal.
@@ -29,49 +30,64 @@ import nl.adaptivity.xmlutil.serialization.XmlElement
 data class PersonalDto(
     @SerialName("id")
     val id: Int = 0,
-    @XmlElement
+
     @SerialName("nombre")
-    val nombre: String = "",
-    @XmlElement
+    @XmlElement(true)
+    val nombre: String,
+
     @SerialName("apellidos")
-    val apellidos: String = "",
-    @XmlElement
+    @XmlElement(true)
+    val apellidos: String,
+
     @SerialName("fechaNacimiento")
-    val fechaNacimiento: String = "",
-    @XmlElement
+    @XmlElement(true)
+    val fechaNacimiento: String,
+
     @SerialName("fechaIncorporacion")
-    val fechaIncorporacion: String = "",
-    @XmlElement
+    @XmlElement(true)
+    val fechaIncorporacion: String,
+
     @SerialName("salario")
-    val salario: Double = 0.0,
-    @XmlElement
+    @XmlElement(true)
+    val salario: Double,
+
     @SerialName("pais")
-    val paisOrigen: String = "",
-    @XmlElement
+    @XmlElement(true)
+    val paisOrigen: String,
+
     @SerialName("rol")
-    val rol: String = "",
-    @XmlElement
+    @XmlElement(true)
+    val rol: String? = null,
+
     @SerialName("especialidad")
-    val especializacion: String = "",
-    @XmlElement
+    @XmlElement(true)
+    val especializacion: String? = null,
+
     @SerialName("tipo")
-    val tipo: String = "",
-    @XmlElement
+    @XmlElement(true)
+    val tipo: String? = null,
+
     @SerialName("posicion")
+    @XmlElement(true)
     val posicion: String? = null,
-    @XmlElement
+
     @SerialName("dorsal")
-    val dorsal: Int? = null,
-    @XmlElement
+    @XmlElement(true)
+    val dorsal: String? = null,
+
     @SerialName("altura")
-    val altura: Double? = null,
-    @XmlElement
+    @XmlElement(true)
+    val altura: String? = null,
+
     @SerialName("peso")
-    val peso: Double? = null,
-    @XmlElement
+    @XmlElement(true)
+    val peso: String? = null,
+
     @SerialName("goles")
-    val goles: Int? = null,
-    @XmlElement
+    @XmlElement(true)
+    val goles: String? = null,
+
     @SerialName("partidosJugados")
-    val partidosJugados: Int? = null,
+    @XmlElement(true)
+    val partidosJugados: String? = null,
 )

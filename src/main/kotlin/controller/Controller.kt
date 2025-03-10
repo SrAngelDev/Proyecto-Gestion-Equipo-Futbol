@@ -1,9 +1,11 @@
 package srangeldev.controller
 
+import Consultas
 import org.lighthousegames.logging.logging
 import srangeldev.models.Entrenador
 import srangeldev.models.Jugador
 import srangeldev.service.PersonalServiceImpl
+import srangeldev.storage.FileFormat
 import java.time.LocalDate
 
 /**
@@ -18,7 +20,7 @@ class Controller {
      */
     fun cargarDatos() {
         logger.debug { "Cargando datos" }
-        service.importFromFile("data/personal.json")
+        service.importFromFile("data/personal.xml", FileFormat.XML)
     }
 
     /**
@@ -187,7 +189,7 @@ class Controller {
      */
     fun copiarDatos() {
         logger.debug { "Copiando datos" }
-        service.exportToFile("data/personal.json")
+        service.exportToFile("data/personal_back.csv", FileFormat.CSV)
     }
 
     /**
@@ -196,6 +198,8 @@ class Controller {
     fun realizarConsultas() {
         logger.debug { "Realizando consultas" }
         println("Realizando consultas")
+        val consultas = Consultas()
+        consultas.realizarConsultas()
     }
 
     /**

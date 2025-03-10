@@ -3,7 +3,7 @@ package srangeldev.storage
 import nl.adaptivity.xmlutil.serialization.XML
 import org.lighthousegames.logging.logging
 import srangeldev.dto.PersonalDto
-import srangeldev.dto.PersonalsDto
+import srangeldev.dto.EquipoDto
 import srangeldev.exceptions.PersonalException
 import srangeldev.mapper.toDto
 import srangeldev.mapper.toEntrenador
@@ -40,12 +40,13 @@ class PersonalStorageXml : PersonalStorageFile {
         }
         val xml = XML {}
         val xmlString = file.readText()
-        val personalDto: PersonalsDto = xml.decodeFromString(PersonalsDto.serializer(), xmlString)
+        val personalDto: EquipoDto = xml.decodeFromString(EquipoDto.serializer(), xmlString)
         val personalListDto = personalDto.equipo
         return personalListDto.map {
-            when (it) {
-                is PersonalDto -> it.toEntrenador()
-                else -> it.toJugador()
+            when (it.tipo) {
+                "Entrenador" -> it.toEntrenador()
+                "Jugador" -> it.toJugador()
+                else -> throw IllegalArgumentException("Tipo de Personal desconocido")
             }
         }
     }
@@ -71,7 +72,7 @@ class PersonalStorageXml : PersonalStorageFile {
                 else -> throw IllegalArgumentException("Tipo de Personal desconocido")
             }
         }
-        val personalDto = PersonalsDto(equipo = personalListDto)
-        file.writeText(xml.encodeToString(PersonalsDto.serializer(), personalDto))
+        val personalDto = EquipoDto(equipo = personalListDto)
+        file.writeText(xml.encodeToString(EquipoDto.serializer(), personalDto))
     }
 }

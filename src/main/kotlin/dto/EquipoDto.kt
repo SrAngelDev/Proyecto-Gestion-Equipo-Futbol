@@ -10,6 +10,6 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 @SerialName("equipo")
-data class PersonalsDto(
+data class EquipoDto(
     val equipo: List<PersonalDto>
 )

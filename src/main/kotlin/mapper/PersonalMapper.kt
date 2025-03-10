@@ -3,6 +3,7 @@ package srangeldev.mapper
 import srangeldev.dto.PersonalDto
 import srangeldev.models.Entrenador
 import srangeldev.models.Jugador
+import srangeldev.models.Personal
 import java.time.LocalDate
 
 /**
@@ -34,11 +35,11 @@ fun Jugador.toDto(): PersonalDto {
         salario = this.salario,
         paisOrigen = this.paisOrigen,
         posicion = this.posicion.toString(),
-        dorsal = this.dorsal,
-        altura = this.altura,
-        peso = this.peso,
-        goles = this.goles,
-        partidosJugados = this.partidosJugados
+        dorsal = this.dorsal.toString(),
+        altura = this.altura.toString(),
+        peso = this.peso.toString(),
+        goles = this.goles.toString(),
+        partidosJugados = this.partidosJugados.toString()
     )
 }
 
@@ -46,6 +47,16 @@ fun Jugador.toDto(): PersonalDto {
  * Función de mapeo de dto a entrenador.
  */
 fun PersonalDto.toEntrenador(): Entrenador {
+    val especializacion = if (this.especializacion.isNullOrEmpty()) {
+        Entrenador.Especializacion.ENTRENADOR_PRINCIPAL
+    } else {
+        try {
+            Entrenador.Especializacion.valueOf(this.especializacion.toString().uppercase())
+        } catch (e: IllegalArgumentException) {
+            throw IllegalArgumentException("Especialización no válida: ${this.especializacion}")
+        }
+    }
+
     return Entrenador(
         id = this.id,
         nombre = this.nombre,
@@ -54,7 +65,7 @@ fun PersonalDto.toEntrenador(): Entrenador {
         fechaIncorporacion = LocalDate.parse(this.fechaIncorporacion),
         salario = this.salario,
         paisOrigen = this.paisOrigen,
-        especializacion = Entrenador.Especializacion.valueOf(this.especializacion.toString())
+        especializacion = especializacion
     )
 }
 
@@ -71,10 +82,10 @@ fun PersonalDto.toJugador(): Jugador {
         salario = this.salario,
         paisOrigen = this.paisOrigen,
         posicion = Jugador.Posicion.valueOf(this.posicion.toString()),
-        dorsal = this.dorsal ?: 0,
-        altura = this.altura ?: 0.0,
-        peso = this.peso ?: 0.0,
-        goles = this.goles ?: 0,
-        partidosJugados = this.partidosJugados ?: 0
+        dorsal = this.dorsal?.toInt() ?: 0,
+        altura = this.altura?.toDouble() ?: 0.0,
+        peso = this.peso?.toDouble() ?: 0.0,
+        goles = this.goles?.toInt() ?: 0,
+        partidosJugados = this.partidosJugados?.toInt() ?: 0
     )
 }

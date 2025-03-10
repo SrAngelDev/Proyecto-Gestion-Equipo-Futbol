@@ -56,5 +56,4 @@ object Config {
 
     // Clase para encapsular las propiedades de la configuración, y valores por defecto
     data class ConfigProperties(val dataDir: String = "data", val backupDir: String = "backup")
-
 }
