@@ -20,7 +20,15 @@ class Controller {
      */
     fun cargarDatos() {
         logger.debug { "Cargando datos" }
-        service.importFromFile("data/personal.xml", FileFormat.XML)
+        service.importFromFile("data/personal.json", FileFormat.JSON)
+    }
+
+    /**
+     * Copia los datos a un archivo.
+     */
+    fun copiarDatos() {
+        logger.debug { "Copiando datos" }
+        service.exportToFile("data/personal_back.json", FileFormat.JSON)
     }
 
     /**
@@ -184,13 +192,7 @@ class Controller {
         }
     }
 
-    /**
-     * Copia los datos a un archivo.
-     */
-    fun copiarDatos() {
-        logger.debug { "Copiando datos" }
-        service.exportToFile("data/personal_back.csv", FileFormat.CSV)
-    }
+
 
     /**
      * Realiza consultas sobre los datos del personal.

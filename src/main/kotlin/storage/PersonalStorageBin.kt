@@ -1,13 +1,16 @@
 package srangeldev.storage
 
 import org.lighthousegames.logging.logging
+import srangeldev.dto.PersonalBinDto
 import srangeldev.exceptions.PersonalException
+import srangeldev.mapper.toBinDto
+import srangeldev.mapper.toEntrenador
+import srangeldev.mapper.toJugador
 import srangeldev.models.Entrenador
 import srangeldev.models.Jugador
 import srangeldev.models.Personal
 import java.io.File
 import java.io.RandomAccessFile
-import java.time.LocalDate
 
 /**
  * Clase que implementa la interfaz PersonalStorageFile para el almacenamiento de datos de personal en formato Bin.
@@ -35,47 +38,29 @@ class PersonalStorageBin : PersonalStorageFile {
         val personalList = mutableListOf<Personal>()
 
         RandomAccessFile(file, "r").use { raf ->
-            // Mientras no se haya llegado al final del fichero,
-            // leer los datos de cada persona y añadirlos a la lista
             while (raf.filePointer < raf.length()) {
-                val id = raf.readInt()
-                val nombre = raf.readUTF()
-                val apellidos = raf.readUTF()
-                val fechaNacimiento = LocalDate.parse(raf.readUTF())
-                val fechaIncorporacion = LocalDate.parse(raf.readUTF())
-                val salario = raf.readDouble()
-                val paisOrigen = raf.readUTF()
-                val tipo = raf.readUTF()
-
-                val personal = when (tipo) {
-                    "Jugador" -> Jugador(
-                        id,
-                        nombre,
-                        apellidos,
-                        fechaNacimiento,
-                        fechaIncorporacion,
-                        salario,
-                        paisOrigen,
-                        Jugador.Posicion.valueOf(raf.readUTF()),
-                        raf.readInt(),
-                        raf.readDouble(),
-                        raf.readDouble(),
-                        raf.readInt(),
-                        raf.readInt()
-                    )
-                    "Entrenador" -> Entrenador(
-                        id,
-                        nombre,
-                        apellidos,
-                        fechaNacimiento,
-                        fechaIncorporacion,
-                        salario,
-                        paisOrigen,
-                        Entrenador.Especializacion.valueOf(raf.readUTF())
-                    )
-                    else -> throw PersonalException.PersonalStorageException("Tipo desconocido: $tipo")
+                val dto = PersonalBinDto(
+                    id = raf.readInt(),
+                    nombre = raf.readUTF(),
+                    apellidos = raf.readUTF(),
+                    fechaNacimiento = raf.readUTF(),
+                    fechaIncorporacion = raf.readUTF(),
+                    salario = raf.readDouble(),
+                    pais = raf.readUTF(),
+                    rol = raf.readUTF(),
+                    especialidad = raf.readUTF(),
+                    posicion = raf.readUTF(),
+                    dorsal = raf.readInt(),
+                    altura = raf.readDouble(),
+                    peso = raf.readDouble(),
+                    goles = raf.readInt(),
+                    partidosJugados = raf.readInt()
+                )
+                val personal = when (dto.rol) {
+                    "Entrenador" -> dto.toEntrenador()
+                    "Jugador" -> dto.toJugador()
+                    else -> throw PersonalException.PersonalStorageException("Tipo de personal desconocido: ${dto.rol}")
                 }
-
                 personalList.add(personal)
             }
         }
@@ -95,37 +80,32 @@ class PersonalStorageBin : PersonalStorageFile {
         val parentFile = file.parentFile
         if (parentFile == null || !parentFile.exists() || !parentFile.isDirectory || !file.name.endsWith(".bin", true)) {
             logger.error { "El directorio padre del fichero no existe: ${parentFile?.absolutePath}" }
-            val parentDir = file.parentFile
-            if (parentDir == null || !parentDir.exists()) {
-                throw PersonalException.PersonalStorageException("El directorio padre del fichero no existe: ${parentDir?.name}")
-            }
+            throw PersonalException.PersonalStorageException("El directorio padre del fichero no existe: ${parentFile?.absolutePath}")
         }
 
         RandomAccessFile(file, "rw").use { raf ->
             raf.setLength(0) // Limpiar el archivo antes de escribir
             for (personal in personalList) {
-                raf.writeInt(personal.id)
-                raf.writeUTF(personal.nombre)
-                raf.writeUTF(personal.apellidos)
-                raf.writeUTF(personal.fechaNacimiento.toString())
-                raf.writeUTF(personal.fechaIncorporacion.toString())
-                raf.writeDouble(personal.salario)
-                raf.writeUTF(personal.paisOrigen)
-                when (personal) {
-                    is Jugador -> {
-                        raf.writeUTF("Jugador")
-                        raf.writeUTF(personal.posicion.name)
-                        raf.writeInt(personal.dorsal)
-                        raf.writeDouble(personal.altura)
-                        raf.writeDouble(personal.peso)
-                        raf.writeInt(personal.goles)
-                        raf.writeInt(personal.partidosJugados)
-                    }
-                    is Entrenador -> {
-                        raf.writeUTF("Entrenador")
-                        raf.writeUTF(personal.especializacion.name)
-                    }
+                val dto = when (personal) {
+                    is Entrenador -> personal.toBinDto()
+                    is Jugador -> personal.toBinDto()
+                    else -> throw IllegalArgumentException("Tipo de personal desconocido")
                 }
+                raf.writeInt(dto.id)
+                raf.writeUTF(dto.nombre)
+                raf.writeUTF(dto.apellidos)
+                raf.writeUTF(dto.fechaNacimiento)
+                raf.writeUTF(dto.fechaIncorporacion)
+                raf.writeDouble(dto.salario)
+                raf.writeUTF(dto.pais)
+                raf.writeUTF(dto.rol)
+                raf.writeUTF(dto.especialidad ?: "")
+                raf.writeUTF(dto.posicion ?: "")
+                raf.writeInt(dto.dorsal ?: 0)
+                raf.writeDouble(dto.altura ?: 0.0)
+                raf.writeDouble(dto.peso ?: 0.0)
+                raf.writeInt(dto.goles ?: 0)
+                raf.writeInt(dto.partidosJugados ?: 0)
             }
         }
     }

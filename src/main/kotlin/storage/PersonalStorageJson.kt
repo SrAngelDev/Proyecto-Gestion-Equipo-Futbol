@@ -2,8 +2,13 @@ package srangeldev.storage
 
 import kotlinx.serialization.json.Json
 import org.lighthousegames.logging.logging
-import srangeldev.dto.PersonalDto
+import srangeldev.dto.PersonalJsonDto
 import srangeldev.exceptions.PersonalException
+import srangeldev.mapper.toJsonDto
+import srangeldev.mapper.toEntrenador
+import srangeldev.mapper.toJugador
+import srangeldev.models.Entrenador
+import srangeldev.models.Jugador
 import srangeldev.models.Personal
 import java.io.File
 
@@ -22,7 +27,13 @@ class PersonalStorageJson: PersonalStorageFile {
             throw PersonalException.PersonalStorageException("El fichero no existe, o no es un fichero o no se puede leer: $file")
         }
         val json = Json { ignoreUnknownKeys = true }
-        return json.decodeFromString<List<PersonalDto>>(file.readText()).map { it.toModel() }
+        return json.decodeFromString<List<PersonalJsonDto>>(file.readText()).map {
+            when (it.rol) {
+                "Entrenador" -> it.toEntrenador()
+                "Jugador" -> it.toJugador()
+                else -> throw IllegalArgumentException("Tipo de personal desconocido: ${it.rol}")
+            }
+        }
     }
 
     override fun writeToFile(file: File, personal: List<Personal>) {
@@ -32,6 +43,12 @@ class PersonalStorageJson: PersonalStorageFile {
             throw PersonalException.PersonalStorageException("El directorio padre del fichero no existe: ${file.parentFile.absolutePath}")
         }
         val json = Json { ignoreUnknownKeys = true; prettyPrint = true }
-        file.writeText(json.encodeToString<List<PersonalDto>>(personal.map { it.toDto() }))
+        file.writeText(json.encodeToString<List<PersonalJsonDto>>(personal.map {
+            when (it) {
+                is Entrenador -> it.toJsonDto()
+                is Jugador -> it.toJsonDto()
+                else -> throw IllegalArgumentException("Tipo de personal desconocido")
+            }
+        }))
     }
 }

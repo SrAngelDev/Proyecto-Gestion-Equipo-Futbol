@@ -11,5 +11,5 @@ import kotlinx.serialization.Serializable
 @Serializable
 @SerialName("equipo")
 data class EquipoDto(
-    val equipo: List<PersonalDto>
+    val equipo: List<PersonalCsvDto>
 )

@@ -2,10 +2,10 @@ package srangeldev.storage
 
 import nl.adaptivity.xmlutil.serialization.XML
 import org.lighthousegames.logging.logging
-import srangeldev.dto.PersonalDto
+import srangeldev.dto.PersonalCsvDto
 import srangeldev.dto.EquipoDto
 import srangeldev.exceptions.PersonalException
-import srangeldev.mapper.toDto
+import srangeldev.mapper.toCsvDto
 import srangeldev.mapper.toEntrenador
 import srangeldev.mapper.toJugador
 import srangeldev.models.Entrenador
@@ -43,7 +43,7 @@ class PersonalStorageXml : PersonalStorageFile {
         val personalDto: EquipoDto = xml.decodeFromString(EquipoDto.serializer(), xmlString)
         val personalListDto = personalDto.equipo
         return personalListDto.map {
-            when (it.tipo) {
+            when (it.rol) {
                 "Entrenador" -> it.toEntrenador()
                 "Jugador" -> it.toJugador()
                 else -> throw IllegalArgumentException("Tipo de Personal desconocido")
@@ -65,10 +65,10 @@ class PersonalStorageXml : PersonalStorageFile {
             throw PersonalException.PersonalStorageException("El directorio padre del fichero no existe o no es un directorio o el fichero no tiene extensión XML: ${file.parentFile.absolutePath}")
         }
         val xml = XML {}
-        val personalListDto: List<PersonalDto> = personalList.map {
+        val personalListDto: List<PersonalCsvDto> = personalList.map {
             when (it) {
-                is Entrenador -> it.toDto()
-                is Jugador -> it.toDto()
+                is Entrenador -> it.toCsvDto()
+                is Jugador -> it.toCsvDto()
                 else -> throw IllegalArgumentException("Tipo de Personal desconocido")
             }
         }

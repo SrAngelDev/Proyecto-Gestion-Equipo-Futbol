@@ -1,12 +1,15 @@
 package srangeldev.storage
 
 import org.lighthousegames.logging.logging
+import srangeldev.dto.PersonalCsvDto
 import srangeldev.exceptions.PersonalException
+import srangeldev.mapper.toCsvDto
+import srangeldev.mapper.toEntrenador
+import srangeldev.mapper.toJugador
 import srangeldev.models.Entrenador
 import srangeldev.models.Jugador
 import srangeldev.models.Personal
 import java.io.File
-import java.time.LocalDate
 
 /**
  * Clase que implementa la interfaz PersonalStorageFile para el almacenamiento de datos de personal en formato CSV.
@@ -36,33 +39,27 @@ class PersonalStorageCsv : PersonalStorageFile {
             .map { it.split(",") }
             .map { it.map { it.trim() } }
             .map {
-                when (it[0]) {
-                    "Entrenador" -> Entrenador(
-                        id = it[1].toInt(),
-                        nombre = it[2],
-                        apellidos = it[3],
-                        fechaNacimiento = LocalDate.parse(it[4]),
-                        fechaIncorporacion = LocalDate.parse(it[5]),
-                        salario = it[6].toDouble(),
-                        paisOrigen = it[7],
-                        especializacion = Entrenador.Especializacion.valueOf(it[8])
-                    )
-                    "Jugador" -> Jugador(
-                        id = it[1].toInt(),
-                        nombre = it[2],
-                        apellidos = it[3],
-                        fechaNacimiento = LocalDate.parse(it[4]),
-                        fechaIncorporacion = LocalDate.parse(it[5]),
-                        salario = it[6].toDouble(),
-                        paisOrigen = it[7],
-                        posicion = Jugador.Posicion.valueOf(it[8].trim().uppercase()),
-                        dorsal = it[9].toInt(),
-                        altura = it[10].toDouble(),
-                        peso = it[11].toDouble(),
-                        goles = it[12].toInt(),
-                        partidosJugados = it[13].toInt()
-                    )
-                    else -> throw PersonalException.PersonalStorageException("Tipo de personal desconocido: ${it[0]}")
+                val dto = PersonalCsvDto(
+                    id = it[1].toInt(),
+                    nombre = it[2],
+                    apellidos = it[3],
+                    fechaNacimiento = it[4],
+                    fechaIncorporacion = it[5],
+                    salario = it[6].toDouble(),
+                    pais = it[7],
+                    rol = it[0],
+                    especialidad = it.getOrNull(8),
+                    posicion = it.getOrNull(9),
+                    dorsal = it.getOrNull(10),
+                    altura = it.getOrNull(11)?.toDouble(),
+                    peso = it.getOrNull(12)?.toDouble(),
+                    goles = it.getOrNull(13)?.toInt(),
+                    partidosJugados = it.getOrNull(14)?.toInt()
+                )
+                when (dto.rol) {
+                    "Entrenador" -> dto.toEntrenador()
+                    "Jugador" -> dto.toJugador()
+                    else -> throw PersonalException.PersonalStorageException("Tipo de personal desconocido: ${dto.rol}")
                 }
             }
     }
@@ -87,37 +84,29 @@ class PersonalStorageCsv : PersonalStorageFile {
         )
 
         personalList.forEach { personal ->
-            val data = when (personal) {
-                is Entrenador -> {
-                    "Entrenador," +
-                            "${personal.id}," +
-                            "${personal.nombre}," +
-                            "${personal.apellidos}," +
-                            "${personal.fechaNacimiento}," +
-                            "${personal.fechaIncorporacion}," +
-                            "${personal.salario}," +
-                            "${personal.paisOrigen}," +
-                            "${personal.especializacion},,,,," // Campos vacíos
-                }
-                is Jugador -> {
-                    "Jugador," +
-                            "${personal.id}," +
-                            "${personal.nombre}," +
-                            "${personal.apellidos}," +
-                            "${personal.fechaNacimiento}," +
-                            "${personal.fechaIncorporacion}," +
-                            "${personal.salario}," +
-                            "${personal.paisOrigen}," +
-                            "," + // Campo vacío para especialización
-                            "${personal.posicion}," +
-                            "${personal.dorsal}," +
-                            "${personal.altura}," +
-                            "${personal.peso}," +
-                            "${personal.goles}," +
-                            "${personal.partidosJugados}"
-                }
+            val dto = when (personal) {
+                is Entrenador -> personal.toCsvDto()
+                is Jugador -> personal.toCsvDto()
                 else -> throw IllegalArgumentException("Tipo de personal desconocido")
             }
+
+            val data = listOf(
+                dto.rol,
+                dto.id,
+                dto.nombre,
+                dto.apellidos,
+                dto.fechaNacimiento,
+                dto.fechaIncorporacion,
+                dto.salario,
+                dto.pais,
+                dto.especialidad ?: "",
+                dto.posicion ?: "",
+                dto.dorsal ?: "",
+                dto.altura ?: "",
+                dto.peso ?: "",
+                dto.goles ?: "",
+                dto.partidosJugados ?: ""
+            ).joinToString(",")
 
             file.appendText("$data\n")
         }

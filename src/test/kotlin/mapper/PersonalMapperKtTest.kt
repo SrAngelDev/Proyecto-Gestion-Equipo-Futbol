@@ -3,7 +3,7 @@ package mapper
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.DisplayName
-import srangeldev.dto.PersonalDto
+import srangeldev.dto.PersonalCsvDto
 import srangeldev.mapper.toEntrenador
 import srangeldev.mapper.toJugador
 import srangeldev.models.Entrenador
@@ -14,7 +14,7 @@ class PersonalMapperKtTest {
     @Test
     @DisplayName("Test Personal toEntrenador")
     fun toEntrenador() {
-        val personalDto = PersonalDto(
+        val personalCsvDto = PersonalCsvDto(
             id = 1,
             nombre = "Angel",
             apellidos = "Sanchez",
@@ -25,7 +25,7 @@ class PersonalMapperKtTest {
             especializacion = Entrenador.Especializacion.ENTRENADOR_PRINCIPAL.toString()
         )
 
-        val entrenador = personalDto.toEntrenador()
+        val entrenador = personalCsvDto.toEntrenador()
 
         assertEquals(1, entrenador.id)
         assertEquals("Angel", entrenador.nombre)
@@ -39,7 +39,7 @@ class PersonalMapperKtTest {
     @Test
     @DisplayName("Test Personal toJugador")
     fun personalToJugador() {
-        val personalDto = PersonalDto(
+        val personalCsvDto = PersonalCsvDto(
             id = 2,
             nombre = "Angel",
             apellidos = "Sanchez",
@@ -55,7 +55,7 @@ class PersonalMapperKtTest {
             partidosJugados = 100
         )
 
-        val jugador = personalDto.toJugador()
+        val jugador = personalCsvDto.toJugador()
 
         assertEquals(2, jugador.id)
         assertEquals("Angel", jugador.nombre)

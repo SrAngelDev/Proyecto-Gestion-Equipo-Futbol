@@ -1,59 +1,118 @@
 package srangeldev.mapper
 
-import srangeldev.dto.PersonalDto
+import srangeldev.dto.*
 import srangeldev.models.Entrenador
 import srangeldev.models.Jugador
 import srangeldev.models.Personal
 import java.time.LocalDate
 
-/**
- * Función de mapeo de entrenador a dto.
- */
-fun Entrenador.toDto(): PersonalDto {
-    return PersonalDto(
+fun Entrenador.toCsvDto(): PersonalCsvDto {
+    return PersonalCsvDto(
         id = this.id,
         nombre = this.nombre,
         apellidos = this.apellidos,
         fechaNacimiento = this.fechaNacimiento.toString(),
         fechaIncorporacion = this.fechaIncorporacion.toString(),
         salario = this.salario,
-        paisOrigen = this.paisOrigen,
-        especializacion = this.especializacion.toString()
+        pais = this.paisOrigen,
+        rol = "Entrenador",
+        especialidad = this.especializacion.toString()
     )
 }
 
-/**
- * Función de mapeo de jugador a dto.
- */
-fun Jugador.toDto(): PersonalDto {
-    return PersonalDto(
+fun Jugador.toCsvDto(): PersonalCsvDto {
+    return PersonalCsvDto(
         id = this.id,
         nombre = this.nombre,
         apellidos = this.apellidos,
         fechaNacimiento = this.fechaNacimiento.toString(),
         fechaIncorporacion = this.fechaIncorporacion.toString(),
         salario = this.salario,
-        paisOrigen = this.paisOrigen,
+        pais = this.paisOrigen,
+        rol = "Jugador",
         posicion = this.posicion.toString(),
         dorsal = this.dorsal.toString(),
-        altura = this.altura.toString(),
-        peso = this.peso.toString(),
-        goles = this.goles.toString(),
-        partidosJugados = this.partidosJugados.toString()
+        altura = this.altura,
+        peso = this.peso,
+        goles = this.goles,
+        partidosJugados = this.partidosJugados
     )
 }
 
-/**
- * Función de mapeo de dto a entrenador.
- */
-fun PersonalDto.toEntrenador(): Entrenador {
-    val especializacion = if (this.especializacion.isNullOrEmpty()) {
+fun Entrenador.toJsonDto(): PersonalJsonDto {
+    return PersonalJsonDto(
+        id = this.id,
+        nombre = this.nombre,
+        apellidos = this.apellidos,
+        fechaNacimiento = this.fechaNacimiento.toString(),
+        fechaIncorporacion = this.fechaIncorporacion.toString(),
+        salario = this.salario,
+        pais = this.paisOrigen,
+        rol = "Entrenador",
+        especialidad = this.especializacion.toString(),
+    )
+}
+
+fun Jugador.toJsonDto(): PersonalJsonDto {
+    return PersonalJsonDto(
+        id = this.id,
+        nombre = this.nombre,
+        apellidos = this.apellidos,
+        fechaNacimiento = this.fechaNacimiento.toString(),
+        fechaIncorporacion = this.fechaIncorporacion.toString(),
+        salario = this.salario,
+        pais = this.paisOrigen,
+        rol = "Jugador",
+        posicion = this.posicion.toString(),
+        dorsal = this.dorsal,
+        altura = this.altura,
+        peso = this.peso,
+        goles = this.goles,
+        partidosJugados = this.partidosJugados,
+    )
+}
+
+fun Entrenador.toXmlDto(): PersonalXmlDto {
+    return PersonalXmlDto(
+        id = this.id,
+        nombre = this.nombre,
+        apellidos = this.apellidos,
+        fechaNacimiento = this.fechaNacimiento.toString(),
+        fechaIncorporacion = this.fechaIncorporacion.toString(),
+        salario = this.salario,
+        pais = this.paisOrigen,
+        rol = "Entrenador",
+        especialidad = this.especializacion.toString()
+    )
+}
+
+fun Jugador.toXmlDto(): PersonalXmlDto {
+    return PersonalXmlDto(
+        id = this.id,
+        nombre = this.nombre,
+        apellidos = this.apellidos,
+        fechaNacimiento = this.fechaNacimiento.toString(),
+        fechaIncorporacion = this.fechaIncorporacion.toString(),
+        salario = this.salario,
+        pais = this.paisOrigen,
+        rol = "Jugador",
+        posicion = this.posicion.toString(),
+        dorsal = this.dorsal.toString(),
+        altura = this.altura,
+        peso = this.peso,
+        goles = this.goles,
+        partidosJugados = this.partidosJugados
+    )
+}
+
+fun PersonalCsvDto.toEntrenador(): Entrenador {
+    val especializacion = if (this.especialidad.isNullOrEmpty()) {
         Entrenador.Especializacion.ENTRENADOR_PRINCIPAL
     } else {
         try {
-            Entrenador.Especializacion.valueOf(this.especializacion.toString().uppercase())
+            Entrenador.Especializacion.valueOf(this.especialidad.uppercase())
         } catch (e: IllegalArgumentException) {
-            throw IllegalArgumentException("Especialización no válida: ${this.especializacion}")
+            throw IllegalArgumentException("Especialización no válida: ${this.especialidad}")
         }
     }
 
@@ -64,15 +123,12 @@ fun PersonalDto.toEntrenador(): Entrenador {
         fechaNacimiento = LocalDate.parse(this.fechaNacimiento),
         fechaIncorporacion = LocalDate.parse(this.fechaIncorporacion),
         salario = this.salario,
-        paisOrigen = this.paisOrigen,
+        paisOrigen = this.pais,
         especializacion = especializacion
     )
 }
 
-/**
- * Función de mapeo de dto a jugador.
- */
-fun PersonalDto.toJugador(): Jugador {
+fun PersonalCsvDto.toJugador(): Jugador {
     return Jugador(
         id = this.id,
         nombre = this.nombre,
@@ -80,12 +136,168 @@ fun PersonalDto.toJugador(): Jugador {
         fechaNacimiento = LocalDate.parse(this.fechaNacimiento),
         fechaIncorporacion = LocalDate.parse(this.fechaIncorporacion),
         salario = this.salario,
-        paisOrigen = this.paisOrigen,
-        posicion = Jugador.Posicion.valueOf(this.posicion.toString()),
+        paisOrigen = this.pais,
+        posicion = Jugador.Posicion.valueOf(this.posicion ?: "DESCONOCIDO"),
         dorsal = this.dorsal?.toInt() ?: 0,
-        altura = this.altura?.toDouble() ?: 0.0,
-        peso = this.peso?.toDouble() ?: 0.0,
-        goles = this.goles?.toInt() ?: 0,
-        partidosJugados = this.partidosJugados?.toInt() ?: 0
+        altura = this.altura ?: 0.0,
+        peso = this.peso ?: 0.0,
+        goles = this.goles ?: 0,
+        partidosJugados = this.partidosJugados ?: 0
+    )
+}
+
+fun PersonalJsonDto.toEntrenador(): Entrenador {
+    val especializacion = if (this.especialidad.isNullOrEmpty()) {
+        Entrenador.Especializacion.ENTRENADOR_PRINCIPAL
+    } else {
+        try {
+            Entrenador.Especializacion.valueOf(this.especialidad.uppercase())
+        } catch (e: IllegalArgumentException) {
+            throw IllegalArgumentException("Especialización no válida: ${this.especialidad}")
+        }
+    }
+
+    return Entrenador(
+        id = this.id,
+        nombre = this.nombre,
+        apellidos = this.apellidos,
+        fechaNacimiento = LocalDate.parse(this.fechaNacimiento),
+        fechaIncorporacion = LocalDate.parse(this.fechaIncorporacion),
+        salario = this.salario,
+        paisOrigen = this.pais,
+        especializacion = especializacion
+    )
+}
+
+fun PersonalJsonDto.toJugador(): Jugador {
+    return Jugador(
+        id = this.id,
+        nombre = this.nombre,
+        apellidos = this.apellidos,
+        fechaNacimiento = LocalDate.parse(this.fechaNacimiento),
+        fechaIncorporacion = LocalDate.parse(this.fechaIncorporacion),
+        salario = this.salario,
+        paisOrigen = this.pais,
+        posicion = Jugador.Posicion.valueOf(this.posicion ?: "DESCONOCIDO"),
+        dorsal = this.dorsal?.toInt() ?: 0,
+        altura = this.altura ?: 0.0,
+        peso = this.peso ?: 0.0,
+        goles = this.goles ?: 0,
+        partidosJugados = this.partidosJugados ?: 0
+    )
+}
+
+fun PersonalXmlDto.toEntrenador(): Entrenador {
+    val especializacion = if (this.especialidad.isNullOrEmpty()) {
+        Entrenador.Especializacion.ENTRENADOR_PRINCIPAL
+    } else {
+        try {
+            Entrenador.Especializacion.valueOf(this.especialidad.uppercase())
+        } catch (e: IllegalArgumentException) {
+            throw IllegalArgumentException("Especialización no válida: ${this.especialidad}")
+        }
+    }
+
+    return Entrenador(
+        id = this.id,
+        nombre = this.nombre,
+        apellidos = this.apellidos,
+        fechaNacimiento = LocalDate.parse(this.fechaNacimiento),
+        fechaIncorporacion = LocalDate.parse(this.fechaIncorporacion),
+        salario = this.salario,
+        paisOrigen = this.pais,
+        especializacion = especializacion
+    )
+}
+
+fun PersonalXmlDto.toJugador(): Jugador {
+    return Jugador(
+        id = this.id,
+        nombre = this.nombre,
+        apellidos = this.apellidos,
+        fechaNacimiento = LocalDate.parse(this.fechaNacimiento),
+        fechaIncorporacion = LocalDate.parse(this.fechaIncorporacion),
+        salario = this.salario,
+        paisOrigen = this.pais,
+        posicion = Jugador.Posicion.valueOf(this.posicion ?: "DESCONOCIDO"),
+        dorsal = this.dorsal?.toInt() ?: 0,
+        altura = this.altura ?: 0.0,
+        peso = this.peso ?: 0.0,
+        goles = this.goles ?: 0,
+        partidosJugados = this.partidosJugados ?: 0
+    )
+}
+
+fun Entrenador.toBinDto(): PersonalBinDto {
+    return PersonalBinDto(
+        id = this.id,
+        nombre = this.nombre,
+        apellidos = this.apellidos,
+        fechaNacimiento = this.fechaNacimiento.toString(),
+        fechaIncorporacion = this.fechaIncorporacion.toString(),
+        salario = this.salario,
+        pais = this.paisOrigen,
+        rol = "Entrenador",
+        especialidad = this.especializacion.toString()
+    )
+}
+
+fun Jugador.toBinDto(): PersonalBinDto {
+    return PersonalBinDto(
+        id = this.id,
+        nombre = this.nombre,
+        apellidos = this.apellidos,
+        fechaNacimiento = this.fechaNacimiento.toString(),
+        fechaIncorporacion = this.fechaIncorporacion.toString(),
+        salario = this.salario,
+        pais = this.paisOrigen,
+        rol = "Jugador",
+        posicion = this.posicion.toString(),
+        dorsal = this.dorsal,
+        altura = this.altura,
+        peso = this.peso,
+        goles = this.goles,
+        partidosJugados = this.partidosJugados
+    )
+}
+
+fun PersonalBinDto.toEntrenador(): Entrenador {
+    val especializacion = if (this.especialidad.isNullOrEmpty()) {
+        Entrenador.Especializacion.ENTRENADOR_PRINCIPAL
+    } else {
+        try {
+            Entrenador.Especializacion.valueOf(this.especialidad.uppercase())
+        } catch (e: IllegalArgumentException) {
+            throw IllegalArgumentException("Especialización no válida: ${this.especialidad}")
+        }
+    }
+
+    return Entrenador(
+        id = this.id,
+        nombre = this.nombre,
+        apellidos = this.apellidos,
+        fechaNacimiento = LocalDate.parse(this.fechaNacimiento),
+        fechaIncorporacion = LocalDate.parse(this.fechaIncorporacion),
+        salario = this.salario,
+        paisOrigen = this.pais,
+        especializacion = especializacion
+    )
+}
+
+fun PersonalBinDto.toJugador(): Jugador {
+    return Jugador(
+        id = this.id,
+        nombre = this.nombre,
+        apellidos = this.apellidos,
+        fechaNacimiento = LocalDate.parse(this.fechaNacimiento),
+        fechaIncorporacion = LocalDate.parse(this.fechaIncorporacion),
+        salario = this.salario,
+        paisOrigen = this.pais,
+        posicion = Jugador.Posicion.valueOf(this.posicion ?: "DESCONOCIDO"),
+        dorsal = this.dorsal ?: 0,
+        altura = this.altura ?: 0.0,
+        peso = this.peso ?: 0.0,
+        goles = this.goles ?: 0,
+        partidosJugados = this.partidosJugados ?: 0
     )
 }
