@@ -9,7 +9,7 @@ class PersonalExceptionTest {
  @Test
  @DisplayName("Prueba de excepción PersonalNotFoundException")
  fun testPersonalNotFoundException() {
-  val id = "1234"
+  val id = 1234
   val exception = PersonalException.PersonalNotFoundException(id)
 
   assertNotNull(exception)
