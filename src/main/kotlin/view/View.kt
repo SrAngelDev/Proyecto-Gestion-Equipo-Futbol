@@ -52,7 +52,7 @@ class View {
             println("1. CSV")
             println("2. XML")
             println("3. JSON")
-            println("4. Salir.")
+            println("4. Salir")
 
             print("Seleccione una opción: ")
             opcion = readln().toInt()
@@ -61,7 +61,7 @@ class View {
                 1 -> cargarDatosCsv()
                 2 -> cargarDatosXml()
                 3 -> cargarDatosJson()
-                else -> println("Opción no válida.")
+                else -> println("Volviendo al menu principal.")
             }
         } while (opcion != 4)
     }

@@ -16,17 +16,17 @@ data class PersonalCsvDto(
     @SerialName("fecha_incorporacion")
     val fechaIncorporacion: String,
     @SerialName("salario")
-    val salario: Double,
+    val salario: Double? = 0.0,
     @SerialName("pais")
-    val pais: String,
+    val paisOrigen: String,
     @SerialName("rol")
     val rol: String? = null,
     @SerialName("especialidad")
-    val especialidad: String? = null,
+    val especializacion: String? = null,
     @SerialName("posicion")
     val posicion: String? = null,
     @SerialName("dorsal")
-    val dorsal: String? = null,
+    val dorsal: Int? = null,
     @SerialName("altura")
     val altura: Double? = null,
     @SerialName("peso")

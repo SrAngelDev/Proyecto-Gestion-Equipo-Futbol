@@ -30,7 +30,7 @@ object Config {
         // Obtiene las propiedades, proporcionando valores por defecto si no se encuentran
         val dataDirProperty = properties.getProperty("data.directory") ?: "data"
         val backupDirProperty = properties.getProperty("backup.directory") ?: "backup"
-        val inputFormatsProperty = properties.getProperty("input.formats") ?: "CSV,XML,JSON,BIN"
+        val inputFormatsProperty = properties.getProperty("input.formats") ?: "CSV,XML,JSON"
         val outputFormatsProperty = properties.getProperty("output.formats") ?: "CSV,XML,JSON,BIN"
 
         // Obtiene los directorios de datos y backup

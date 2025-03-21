@@ -11,7 +11,7 @@ import srangeldev.models.Personal
  */
 class PersonalRespositoryImpl : PersonalRepository {
     private val logger = logging()
-    private val personal = mutableListOf<Personal>()
+    private val personal = mutableMapOf<Int, Personal>()
     private var nextId = 1
 
     init {

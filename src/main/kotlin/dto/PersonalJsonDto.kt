@@ -2,6 +2,7 @@ package srangeldev.dto
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import srangeldev.models.Entrenador
 
 @Serializable
 data class PersonalJsonDto(
@@ -16,13 +17,13 @@ data class PersonalJsonDto(
     @SerialName("fecha_incorporacion")
     val fechaIncorporacion: String,
     @SerialName("salario")
-    val salario: Double,
+    val salario: Double? = 0.0,
     @SerialName("pais")
     val pais: String,
     @SerialName("rol")
     val rol: String? = null,
     @SerialName("especialidad")
-    val especialidad: String? = null,
+    val especializacion: String? = null,
     @SerialName("posicion")
     val posicion: String? = null,
     @SerialName("dorsal")

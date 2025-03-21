@@ -11,7 +11,7 @@ class Entrenador(
     apellidos: String,
     fechaNacimiento: LocalDate,
     fechaIncorporacion: LocalDate,
-    salario: Double,
+    salario: Double?,
     paisOrigen: String,
     val especializacion: Especializacion
 ): Personal(id, nombre, apellidos, fechaNacimiento, fechaIncorporacion, salario, paisOrigen) {

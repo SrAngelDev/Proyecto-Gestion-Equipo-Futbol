@@ -6,7 +6,7 @@ data class PersonalBinDto(
     val apellidos: String,
     val fechaNacimiento: String,
     val fechaIncorporacion: String,
-    val salario: Double,
+    val salario: Double? = 0.0,
     val pais: String,
     val rol: String,
     val especialidad: String? = null,

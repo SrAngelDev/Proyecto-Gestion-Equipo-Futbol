@@ -1,5 +1,6 @@
 package srangeldev.storage
 
+import nl.adaptivity.xmlutil.serialization.DefaultXmlSerializationPolicy
 import nl.adaptivity.xmlutil.serialization.XML
 import org.lighthousegames.logging.logging
 import srangeldev.dto.PersonalCsvDto
@@ -45,7 +46,7 @@ class PersonalStorageXml : PersonalStorageFile {
         val personalDto: EquipoDtoXml = xml.decodeFromString(EquipoDtoXml.serializer(), xmlString)
         val personalListDto = personalDto.equipo
         return personalListDto.map {
-            when (it.rol) {
+            when (it.tipo) {
                 "Entrenador" -> it.toEntrenador()
                 "Jugador" -> it.toJugador()
                 else -> throw IllegalArgumentException("Tipo de Personal desconocido")

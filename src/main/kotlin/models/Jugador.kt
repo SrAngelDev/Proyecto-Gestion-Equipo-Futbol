@@ -11,7 +11,7 @@ class Jugador(
     apellidos: String,
     fechaNacimiento: LocalDate,
     fechaIncorporacion: LocalDate,
-    salario: Double,
+    salario: Double?,
     paisOrigen: String,
     val posicion: Posicion,
     val dorsal: Int,

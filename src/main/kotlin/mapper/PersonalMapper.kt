@@ -14,9 +14,9 @@ fun Entrenador.toCsvDto(): PersonalCsvDto {
         fechaNacimiento = this.fechaNacimiento.toString(),
         fechaIncorporacion = this.fechaIncorporacion.toString(),
         salario = this.salario,
-        pais = this.paisOrigen,
+        paisOrigen = this.paisOrigen,
         rol = "Entrenador",
-        especialidad = this.especializacion.toString()
+        especializacion = this.especializacion.toString()
     )
 }
 
@@ -28,10 +28,10 @@ fun Jugador.toCsvDto(): PersonalCsvDto {
         fechaNacimiento = this.fechaNacimiento.toString(),
         fechaIncorporacion = this.fechaIncorporacion.toString(),
         salario = this.salario,
-        pais = this.paisOrigen,
+        paisOrigen = this.paisOrigen,
         rol = "Jugador",
         posicion = this.posicion.toString(),
-        dorsal = this.dorsal.toString(),
+        dorsal = this.dorsal,
         altura = this.altura,
         peso = this.peso,
         goles = this.goles,
@@ -49,7 +49,7 @@ fun Entrenador.toJsonDto(): PersonalJsonDto {
         salario = this.salario,
         pais = this.paisOrigen,
         rol = "Entrenador",
-        especialidad = this.especializacion.toString(),
+        especializacion = this.especializacion.toString(),
     )
 }
 
@@ -75,13 +75,13 @@ fun Jugador.toJsonDto(): PersonalJsonDto {
 fun Entrenador.toXmlDto(): PersonalXmlDto {
     return PersonalXmlDto(
         id = this.id,
+        tipo = "Entrenador",
         nombre = this.nombre,
         apellidos = this.apellidos,
         fechaNacimiento = this.fechaNacimiento.toString(),
         fechaIncorporacion = this.fechaIncorporacion.toString(),
         salario = this.salario,
         pais = this.paisOrigen,
-        rol = "Entrenador",
         especialidad = this.especializacion.toString()
     )
 }
@@ -89,13 +89,13 @@ fun Entrenador.toXmlDto(): PersonalXmlDto {
 fun Jugador.toXmlDto(): PersonalXmlDto {
     return PersonalXmlDto(
         id = this.id,
+        tipo = "Jugador",
         nombre = this.nombre,
         apellidos = this.apellidos,
         fechaNacimiento = this.fechaNacimiento.toString(),
         fechaIncorporacion = this.fechaIncorporacion.toString(),
         salario = this.salario,
         pais = this.paisOrigen,
-        rol = "Jugador",
         posicion = this.posicion.toString(),
         dorsal = this.dorsal.toString(),
         altura = this.altura,
@@ -106,13 +106,13 @@ fun Jugador.toXmlDto(): PersonalXmlDto {
 }
 
 fun PersonalCsvDto.toEntrenador(): Entrenador {
-    val especializacion = if (this.especialidad.isNullOrEmpty()) {
+    val especializacion = if (this.especializacion.isNullOrEmpty()) {
         Entrenador.Especializacion.ENTRENADOR_PRINCIPAL
     } else {
         try {
-            Entrenador.Especializacion.valueOf(this.especialidad.uppercase())
+            Entrenador.Especializacion.valueOf(this.especializacion.uppercase())
         } catch (e: IllegalArgumentException) {
-            throw IllegalArgumentException("Especialización no válida: ${this.especialidad}")
+            throw IllegalArgumentException("Especialización no válida: ${this.especializacion}")
         }
     }
 
@@ -123,7 +123,7 @@ fun PersonalCsvDto.toEntrenador(): Entrenador {
         fechaNacimiento = LocalDate.parse(this.fechaNacimiento),
         fechaIncorporacion = LocalDate.parse(this.fechaIncorporacion),
         salario = this.salario,
-        paisOrigen = this.pais,
+        paisOrigen = this.paisOrigen,
         especializacion = especializacion
     )
 }
@@ -136,7 +136,7 @@ fun PersonalCsvDto.toJugador(): Jugador {
         fechaNacimiento = LocalDate.parse(this.fechaNacimiento),
         fechaIncorporacion = LocalDate.parse(this.fechaIncorporacion),
         salario = this.salario,
-        paisOrigen = this.pais,
+        paisOrigen = this.paisOrigen,
         posicion = Jugador.Posicion.valueOf(this.posicion ?: "DESCONOCIDO"),
         dorsal = this.dorsal?.toInt() ?: 0,
         altura = this.altura ?: 0.0,
@@ -147,13 +147,13 @@ fun PersonalCsvDto.toJugador(): Jugador {
 }
 
 fun PersonalJsonDto.toEntrenador(): Entrenador {
-    val especializacion = if (this.especialidad.isNullOrEmpty()) {
+    val especializacion = if (this.especializacion.isNullOrEmpty()) {
         Entrenador.Especializacion.ENTRENADOR_PRINCIPAL
     } else {
         try {
-            Entrenador.Especializacion.valueOf(this.especialidad.uppercase())
+            Entrenador.Especializacion.valueOf(this.especializacion.uppercase())
         } catch (e: IllegalArgumentException) {
-            throw IllegalArgumentException("Especialización no válida: ${this.especialidad}")
+            throw IllegalArgumentException("Especialización no válida: ${this.especializacion}")
         }
     }
 

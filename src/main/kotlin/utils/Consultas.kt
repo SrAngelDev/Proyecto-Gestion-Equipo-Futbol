@@ -31,7 +31,7 @@ class Consultas(private val service: PersonalServiceImpl = PersonalServiceImpl()
         println("Jugadores agrupados por país de origen: $jugadoresPorPais")
 
         // 6. Entrenador con el mayor salario.
-        val entrenadorMayorSalario = entrenadores.maxByOrNull { it.salario }
+        val entrenadorMayorSalario = entrenadores.maxByOrNull { it.salario!! }
         println("Entrenador con el mayor salario: $entrenadorMayorSalario")
 
         // 7. Promedio de altura de los jugadores agrupados por posición.
@@ -44,7 +44,7 @@ class Consultas(private val service: PersonalServiceImpl = PersonalServiceImpl()
 
 
         // 9. Jugadores con un salario mayor al promedio del equipo.
-        val jugadoresConSalarioMayorAlPromedio = jugadores.filter { it.salario > jugadores.map { it.salario }.average() }
+        val jugadoresConSalarioMayorAlPromedio = jugadores.filter { it.salario!! > jugadores.map { it.salario!! }.average() }
         println("Jugadores con salario mayor al promedio: $jugadoresConSalarioMayorAlPromedio")
 
         // 10. Número total de partidos jugados por todos los jugadores.
@@ -107,12 +107,12 @@ class Consultas(private val service: PersonalServiceImpl = PersonalServiceImpl()
         println("Estadísticas por posición (máximo, mínimo, media): $estadisticasPorPosicion")
 
         //22. Estimación del coste total de la plantilla.
-        val costeTotalPlantilla = jugadores.sumBy { it.salario.toInt() }
+        val costeTotalPlantilla = jugadores.sumBy { it.salario!!.toInt() }
         println("Coste total de la plantilla: $costeTotalPlantilla")
 
         //23. Total del salario pagado, agrupados por año de incorporación.
         val salarioPorAnioIncorporacion = jugadores.groupBy { it.fechaIncorporacion }.mapValues { entry ->
-            entry.value.sumBy { it.salario.toInt() }
+            entry.value.sumBy { it.salario!!.toInt() }
         }
         println("Total de salario pagado por año de incorporación: $salarioPorAnioIncorporacion")
 
@@ -132,7 +132,7 @@ class Consultas(private val service: PersonalServiceImpl = PersonalServiceImpl()
 
         //26. Entrenadores agrupados por especialidad, y dentro de cada especialidad, el entrenador con el salario más alto.
         val salarioMaximoPorEspecialidad = entrenadores.groupBy { it.especializacion }.mapValues { entry ->
-            entry.value.maxByOrNull { it.salario }
+            entry.value.maxByOrNull { it.salario!! }
         }
         println("Entrenadores con el salario más alto por especialidad: $salarioMaximoPorEspecialidad")
 
@@ -144,9 +144,9 @@ class Consultas(private val service: PersonalServiceImpl = PersonalServiceImpl()
 
         //28. Salario promedio de los jugadores agrupados por su país de origen, y dentro de cada grupo, el jugador con el salario más bajo y alto.
         val salarioPorPais = jugadores.groupBy { it.paisOrigen }.mapValues { entry ->
-            val promedio = entry.value.map { it.salario }.average()
-            val minSalario = entry.value.minByOrNull { it.salario }
-            val maxSalario = entry.value.maxByOrNull { it.salario }
+            val promedio = entry.value.map { it.salario!! }.average()
+            val minSalario = entry.value.minByOrNull { it.salario!! }
+            val maxSalario = entry.value.maxByOrNull { it.salario!! }
             Triple(promedio, minSalario, maxSalario)
         }
         println("Salario promedio, mínimo y máximo por país: $salarioPorPais")
