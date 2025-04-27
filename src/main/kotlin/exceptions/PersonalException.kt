@@ -1,12 +1,23 @@
 package srangeldev.exceptions
 
-
 /**
- * Excepciones de Equipo, jugadores y entrenador
- * @param message Mensaje que salta cuando hay una excepcion
+ * Clase sellada que representa excepciones relacionadas con el personal.
+ *
+ * @param message El mensaje de la excepción.
  */
 sealed class PersonalException(message: String) : Exception(message) {
-    class PersonalNotFoundException(id: String) : PersonalException("Persona no encontrada con id: $id")
-    class SalarioNotFoundException(message: String) : PersonalException("el salario no puede ser menor o igual a 0")
-    class PaisNotFoundException(message: String) : PersonalException("el pais no puede ser nulo ni en blanco")
+
+    /**
+     * Excepción lanzada cuando no se encuentra una persona con el ID especificado.
+     *
+     * @param id El ID de la persona no encontrada.
+     */
+    class PersonalNotFoundException(id: Int) : PersonalException("Persona no encontrada con id: $id")
+
+    /**
+     * Excepción lanzada cuando ocurre un error en el almacenamiento de datos de personal.
+     *
+     * @param message El mensaje de error.
+     */
+    class PersonalStorageException(message: String) : PersonalException("Error en el almacenamiento: $message")
 }
