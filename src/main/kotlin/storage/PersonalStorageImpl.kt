@@ -17,7 +17,6 @@ class PersonalStorageImpl(
     private val storageJson: PersonalStorageFile = PersonalStorageJson(),
     private val storageCsv: PersonalStorageFile = PersonalStorageCsv(),
     private val storageXml: PersonalStorageFile = PersonalStorageXml(),
-    private val storageBin: PersonalStorageFile = PersonalStorageBin()
 ): PersonalStorage {
 
     private val logger = logging()
@@ -35,7 +34,6 @@ class PersonalStorageImpl(
             FileFormat.JSON -> storageJson.readFromFile(file)
             FileFormat.CSV -> storageCsv.readFromFile(file)
             FileFormat.XML -> storageXml.readFromFile(file)
-            FileFormat.BIN -> storageBin.readFromFile(file)
             FileFormat.DEFAULT -> storageJson.readFromFile(file) // Por defecto se asume JSON
         }
     }
@@ -53,7 +51,6 @@ class PersonalStorageImpl(
             FileFormat.JSON -> storageJson.writeToFile(personalList)
             FileFormat.CSV -> storageCsv.writeToFile(personalList)
             FileFormat.XML -> storageXml.writeToFile(personalList)
-            FileFormat.BIN -> storageBin.writeToFile(personalList)
             FileFormat.DEFAULT -> storageJson.writeToFile(personalList) // Por defecto se asume JSON
         }
     }

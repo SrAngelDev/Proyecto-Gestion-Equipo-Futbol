@@ -43,7 +43,7 @@ class View {
     /**
      * Manda al controlador cargar los datos.
      */
-    fun cargarDatos() {
+    private fun cargarDatos() {
         logger.debug { "Cargando datos" }
         println("Cargando datos de los miembros del equipo...")
         cargarDatosCsv()
@@ -70,7 +70,7 @@ class View {
     /**
      * Manda al controlador copiar los datos.
      */
-    fun copiarDatos() {
+    private fun copiarDatos() {
         logger.debug { "Copiando datos" }
         println("¿A que quieres exportar los datos?")
         println("1. CSV")
@@ -79,28 +79,33 @@ class View {
         print("Seleccione una opción: ")
         val opcion = readln().toInt()
         when (opcion) {
-            1 -> controller.copiarDatos("csv")
-            2 -> controller.copiarDatos("xml")
-            3 -> controller.copiarDatos("json")
+            1 -> copiarDatosCSV()
+            2 -> copiarDatosXML()
+            3 -> copiarDatosJSON()
             else -> println("Opción no válida.")
         }
         println("Datos copiados correctamente.")
     }
 
-    fun copiarDatosXML() {
-        logger.debug { "Copiando datos en formato XML" }
-
+    private fun copiarDatosCSV() {
+        logger.debug { "Copiando datos en formato CSV" }
+        controller.copiarDatos("csv")
     }
 
-    fun copiarDatosJSON() {
-        logger.debug { "Copiando datos en formato JSON" }
+    private fun copiarDatosXML() {
+        logger.debug { "Copiando datos en formato XML" }
+        controller.copiarDatos("xml")
+    }
 
+    private fun copiarDatosJSON() {
+        logger.debug { "Copiando datos en formato JSON" }
+        controller.copiarDatos("json")
     }
 
     /**
      * Manda al controlador crear un miembro.
      */
-    fun crearMiembro() {
+    private fun crearMiembro() {
         logger.debug { "Creando miembro" }
         controller.crearMiembro()
     }
@@ -108,7 +113,7 @@ class View {
     /**
      * Manda al controlador actualizar un miembro.
      */
-    fun actualizarMiembro() {
+    private fun actualizarMiembro() {
         logger.debug { "Actualizando miembro" }
         controller.actualizarMiembro()
     }
@@ -116,7 +121,7 @@ class View {
     /**
      * Manda al controlador eliminar un miembro.
      */
-    fun eliminarMiembro() {
+    private fun eliminarMiembro() {
         logger.debug { "Eliminando miembro" }
         controller.eliminarMiembro()
     }
