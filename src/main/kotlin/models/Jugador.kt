@@ -11,7 +11,7 @@ class Jugador(
     apellidos: String,
     fechaNacimiento: LocalDate,
     fechaIncorporacion: LocalDate,
-    salario: Double?,
+    salario: Double,
     paisOrigen: String,
     val posicion: Posicion,
     val dorsal: Int,
@@ -25,5 +25,8 @@ class Jugador(
         DEFENSA,
         CENTROCAMPISTA,
         DELANTERO
+    }
+    override fun toString(): String {
+        return "Jugador(id=$id, nombre='$nombre', apellidos='$apellidos', fechaNacimiento=$fechaNacimiento, fechaIncorporacion=$fechaIncorporacion, salario=$salario, paisOrigen='$paisOrigen', posicion=$posicion, dorsal=$dorsal, altura=$altura, peso=$peso, goles=$goles, partidosJugados=$partidosJugados)"
     }
 }

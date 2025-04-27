@@ -43,6 +43,7 @@ class PersonalServiceImpl(
         logger.info { "Importando personal de fichero: $filePath" }
         val personalList = readFromFile(filePath, format)
         personalList.forEach { repository.save(it) }
+        logger.debug { "Personal guardado en repository: ${repository.getAll()}" }
     }
 
     override fun exportToFile(filePath: String, format: FileFormat) {

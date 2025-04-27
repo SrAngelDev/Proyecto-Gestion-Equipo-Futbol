@@ -3,7 +3,6 @@ package srangeldev.mapper
 import srangeldev.dto.*
 import srangeldev.models.Entrenador
 import srangeldev.models.Jugador
-import srangeldev.models.Personal
 import java.time.LocalDate
 
 fun Entrenador.toCsvDto(): PersonalCsvDto {
@@ -31,11 +30,11 @@ fun Jugador.toCsvDto(): PersonalCsvDto {
         paisOrigen = this.paisOrigen,
         rol = "Jugador",
         posicion = this.posicion.toString(),
-        dorsal = this.dorsal,
-        altura = this.altura,
-        peso = this.peso,
-        goles = this.goles,
-        partidosJugados = this.partidosJugados
+        dorsal = this.dorsal.toString(),
+        altura = this.altura.toString(),
+        peso = this.peso.toString(),
+        goles = this.goles.toString(),
+        partidosJugados = this.partidosJugados.toString()
     )
 }
 
@@ -98,10 +97,10 @@ fun Jugador.toXmlDto(): PersonalXmlDto {
         pais = this.paisOrigen,
         posicion = this.posicion.toString(),
         dorsal = this.dorsal.toString(),
-        altura = this.altura,
-        peso = this.peso,
-        goles = this.goles,
-        partidosJugados = this.partidosJugados
+        altura = this.altura.toString(),
+        peso = this.peso.toString(),
+        goles = this.goles.toString(),
+        partidosJugados = this.partidosJugados.toString()
     )
 }
 
@@ -138,11 +137,11 @@ fun PersonalCsvDto.toJugador(): Jugador {
         salario = this.salario,
         paisOrigen = this.paisOrigen,
         posicion = Jugador.Posicion.valueOf(this.posicion ?: "DESCONOCIDO"),
-        dorsal = this.dorsal?.toInt() ?: 0,
-        altura = this.altura ?: 0.0,
-        peso = this.peso ?: 0.0,
-        goles = this.goles ?: 0,
-        partidosJugados = this.partidosJugados ?: 0
+        dorsal = this.dorsal.toInt(),
+        altura = this.altura.toDouble(),
+        peso = this.peso.toDouble(),
+        goles = this.goles.toInt(),
+        partidosJugados = this.partidosJugados.toInt()
     )
 }
 
@@ -180,10 +179,10 @@ fun PersonalJsonDto.toJugador(): Jugador {
         paisOrigen = this.pais,
         posicion = Jugador.Posicion.valueOf(this.posicion ?: "DESCONOCIDO"),
         dorsal = this.dorsal?.toInt() ?: 0,
-        altura = this.altura ?: 0.0,
-        peso = this.peso ?: 0.0,
-        goles = this.goles ?: 0,
-        partidosJugados = this.partidosJugados ?: 0
+        altura = this.altura?.toDouble() ?: 0.0,
+        peso = this.peso?.toDouble() ?: 0.0,
+        goles = this.goles?.toInt() ?: 0,
+        partidosJugados = this.partidosJugados?.toInt() ?: 0
     )
 }
 
@@ -220,11 +219,11 @@ fun PersonalXmlDto.toJugador(): Jugador {
         salario = this.salario,
         paisOrigen = this.pais,
         posicion = Jugador.Posicion.valueOf(this.posicion ?: "DESCONOCIDO"),
-        dorsal = this.dorsal?.toInt() ?: 0,
-        altura = this.altura ?: 0.0,
-        peso = this.peso ?: 0.0,
-        goles = this.goles ?: 0,
-        partidosJugados = this.partidosJugados ?: 0
+        dorsal = this.dorsal.toInt(),
+        altura = this.altura.toDouble(),
+        peso = this.peso.toDouble(),
+        goles = this.goles.toInt(),
+        partidosJugados = this.partidosJugados.toInt()
     )
 }
 

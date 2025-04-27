@@ -10,31 +10,34 @@ import srangeldev.models.Entrenador
 import srangeldev.models.Jugador
 import srangeldev.models.Personal
 import java.io.File
-import java.time.LocalDate
 
-/**
- * Clase que implementa la interfaz PersonalStorageFile para el almacenamiento de datos de personal en formato CSV.
- */
 class PersonalStorageCsv : PersonalStorageFile {
     private val logger = logging()
+
+    companion object {
+        private const val CSV_HEADER =
+            "tipo,id,nombre,apellidos,fechaNacimiento,fechaIncorporacion,salario,paisOrigen,especializacion,posicion,dorsal,altura,peso,goles,partidosJugados\n"
+    }
 
     init {
         logger.debug { "Inicializando almacenamiento de personal en formato CSV" }
     }
 
-    /**
-     * Lee una lista de objetos Personal desde un archivo CSV.
-     *
-     * @param file El archivo CSV desde el cual leer los datos.
-     * @return Una lista de objetos Personal leídos desde el archivo CSV.
-     * @throws PersonalException.PersonalStorageException Si el archivo no existe, no es un archivo, no se puede leer, está vacío o no tiene extensión CSV.
-     */
-    override fun readFromFile(file: File): List<Personal> {
-        logger.debug { "Leyendo personal de fichero CSV: $file" }
-        if (!file.exists() || !file.isFile || !file.canRead() || file.length() == 0L || !file.name.endsWith(".csv", true)) {
+    private fun validateFileForReading(file: File) {
+        if (!file.exists() || !file.isFile || !file.canRead() || file.length() == 0L || !file.name.endsWith(
+                ".csv",
+                true
+            )
+        ) {
             logger.error { "El fichero no existe, o no es un fichero o no se puede leer: $file" }
             throw PersonalException.PersonalStorageException("El fichero no existe, o no es un fichero o no se puede leer: $file")
         }
+    }
+
+    override fun readFromFile(file: File): List<Personal> {
+        logger.debug { "Leyendo personal de fichero CSV: $file" }
+        validateFileForReading(file)
+
         return file.readLines()
             .drop(1)
             .map { it.split(",") }
@@ -49,13 +52,13 @@ class PersonalStorageCsv : PersonalStorageFile {
                     salario = it[5].toDouble(),
                     paisOrigen = it[6],
                     rol = it[7],
-                    especializacion = it.getOrNull(8),
-                    posicion = it.getOrNull(9),
-                    dorsal = it.getOrNull(10)?.toIntOrNull(),
-                    altura = it.getOrNull(11)?.toDoubleOrNull(),
-                    peso = it.getOrNull(12)?.toDoubleOrNull(),
-                    goles = it.getOrNull(13)?.toIntOrNull(),
-                    partidosJugados = it.getOrNull(14)?.toIntOrNull()
+                    especializacion = it[8],
+                    posicion = it[9],
+                    dorsal = it[10],
+                    altura = it[11],
+                    peso = it[12],
+                    goles = it[13],
+                    partidosJugados = it[14]
                 )
                 when (dto.rol) {
                     "Entrenador" -> dto.toEntrenador()
@@ -65,30 +68,27 @@ class PersonalStorageCsv : PersonalStorageFile {
             }
     }
 
-    /**
-     * Escribe una lista de objetos Personal en un archivo CSV.
-     *
-     * @param file El archivo CSV en el cual escribir los datos.
-     * @param personalList La lista de objetos Personal a escribir en el archivo CSV.
-     * @throws PersonalException.PersonalStorageException Si el directorio padre del archivo no existe, no es un directorio o el archivo no tiene extensión CSV.
-     */
-    override fun writeToFile(file: File, personalList: List<Personal>) {
-        logger.debug { "Escribiendo personal en fichero CSV: $file" }
+    override fun writeToFile(personalList: List<Personal>) {
+        logger.debug { "Escribiendo personal en fichero CSV" }
 
-        if (!file.parentFile.exists() || !file.parentFile.isDirectory || !file.name.endsWith(".csv", true)) {
-            logger.error { "El directorio padre del fichero no existe o no es un directorio o el fichero no tiene extensión CSV: ${file.parentFile.absolutePath}" }
-            throw PersonalException.PersonalStorageException("El directorio padre del fichero no existe o no es un directorio o el fichero no tiene extensión CSV: ${file.parentFile.absolutePath}")
+        val file = File("backup/personal_back.csv")
+
+        if (!file.parentFile.exists()) {
+            file.parentFile.mkdirs()
         }
 
-        file.writeText(
-            "tipo,id,nombre,apellidos,fechaNacimiento,fechaIncorporacion,salario,paisOrigen,especializacion,posicion,dorsal,altura,peso,goles,partidosJugados\n"
-        )
+        if (!file.parentFile.isDirectory || !file.name.endsWith(".csv", true)) {
+            logger.error { "El directorio padre del fichero no es un directorio o el fichero no tiene extensión CSV: ${file.parentFile.absolutePath}" }
+            throw PersonalException.PersonalStorageException("El directorio padre del fichero no es un directorio o el fichero no tiene extensión CSV: ${file.parentFile.absolutePath}")
+        }
+
+        file.writeText(CSV_HEADER)
 
         personalList.forEach { personal ->
             val dto = when (personal) {
                 is Entrenador -> personal.toCsvDto()
                 is Jugador -> personal.toCsvDto()
-                else -> throw IllegalArgumentException("Tipo de personal desconocido")
+                else -> throw PersonalException.PersonalStorageException("Tipo de personal desconocido")
             }
 
             val data = listOf(
@@ -111,5 +111,6 @@ class PersonalStorageCsv : PersonalStorageFile {
 
             file.appendText("$data\n")
         }
+        logger.debug { "Personal guardado en fichero CSV: $file" }
     }
 }

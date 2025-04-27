@@ -37,7 +37,11 @@ class PersonalStorageXml : PersonalStorageFile {
      * @throws PersonalException.PersonalStorageException Si el archivo no existe, no es legible, o no es un archivo XML válido.
      */
     override fun readFromFile(file: File): List<Personal> {
-        if (!file.exists() || !file.isFile || !file.canRead() || file.length() == 0L || !file.name.endsWith(".xml", true)) {
+        if (!file.exists() || !file.isFile || !file.canRead() || file.length() == 0L || !file.name.endsWith(
+                ".xml",
+                true
+            )
+        ) {
             logger.error { "El fichero no existe o es un fichero que no se puede leer: $file" }
             throw PersonalException.PersonalStorageException("El fichero no existe o es un fichero que no se puede leer: $file")
         }
@@ -54,20 +58,20 @@ class PersonalStorageXml : PersonalStorageFile {
         }
     }
 
-    /**
-     * Escribe los datos de personal en un archivo XML.
-     *
-     * @param file El archivo XML en el cual escribir.
-     * @param personalList La lista de datos de personal a escribir.
-     * @throws PersonalException.PersonalStorageException Si el directorio padre no existe, no es un directorio, o el archivo no tiene una extensión XML.
-     */
-    override fun writeToFile(file: File, personalList: List<Personal>) {
-        logger.debug { "Escribiendo personal en formato de fichero XML: $file" }
-        if (!file.parentFile.exists() || !file.parentFile.isDirectory || !file.name.endsWith(".xml", true)) {
-            logger.error { "El directorio padre del fichero no existe o no es un directorio o el fichero no tiene extensión XML: ${file.parentFile.absolutePath}" }
-            throw PersonalException.PersonalStorageException("El directorio padre del fichero no existe o no es un directorio o el fichero no tiene extensión XML: ${file.parentFile.absolutePath}")
+    override fun writeToFile(personalList: List<Personal>) {
+        logger.debug { "Escribiendo personal en formato de fichero XML" }
+        val file = File("backup/personal_back.xml")
+
+        if (!file.parentFile.exists()) {
+            file.parentFile.mkdirs()
         }
-        val xml = XML {}
+
+        if (!file.parentFile.isDirectory || !file.name.endsWith(".xml", true)) {
+            logger.error { "El directorio padre del fichero no es un directorio o el fichero no tiene extensión XML: ${file.parentFile.absolutePath}" }
+            throw PersonalException.PersonalStorageException("El directorio padre del fichero no es un directorio o el fichero no tiene extensión XML: ${file.parentFile.absolutePath}")
+        }
+
+        val xml = XML { indent = 4 }
         val personalListDto: List<PersonalXmlDto> = personalList.map {
             when (it) {
                 is Entrenador -> it.toXmlDto()

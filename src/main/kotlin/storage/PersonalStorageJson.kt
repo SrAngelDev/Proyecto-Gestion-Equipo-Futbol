@@ -36,19 +36,28 @@ class PersonalStorageJson: PersonalStorageFile {
         }
     }
 
-    override fun writeToFile(file: File, personal: List<Personal>) {
-        logger.debug { "Escribiendo personal en fichero JSON: $file" }
-        if (!file.parentFile.exists() || !file.parentFile.isDirectory || !file.name.endsWith(".json")) {
-            logger.error { "El directorio padre del fichero no existe: ${file.parentFile.absolutePath}" }
-            throw PersonalException.PersonalStorageException("El directorio padre del fichero no existe: ${file.parentFile.absolutePath}")
+    override fun writeToFile(personalList: List<Personal>) {
+        logger.debug { "Escribiendo personal en fichero JSON" }
+
+        val file = File("backup/personal_back.json")
+        if (!file.parentFile.exists()) {
+            file.parentFile.mkdirs()
         }
-        val json = Json { ignoreUnknownKeys = true; prettyPrint = true }
-        file.writeText(json.encodeToString<List<PersonalJsonDto>>(personal.map {
-            when (it) {
-                is Entrenador -> it.toJsonDto()
-                is Jugador -> it.toJsonDto()
-                else -> throw IllegalArgumentException("Tipo de personal desconocido")
+
+        val json = Json {
+            prettyPrint = true
+            encodeDefaults = true
+        }
+
+        val jsonDtos = personalList.map { personal ->
+            when (personal) {
+                is Entrenador -> personal.toJsonDto()
+                is Jugador -> personal.toJsonDto()
+                else -> throw PersonalException.PersonalStorageException("Tipo de personal no soportado")
             }
-        }))
+        }
+
+        file.writeText(json.encodeToString<List<PersonalJsonDto>>(jsonDtos))
+        logger.debug { "Personal guardado en fichero JSON: $file" }
     }
 }

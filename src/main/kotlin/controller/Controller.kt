@@ -1,6 +1,5 @@
 package srangeldev.controller
 
-import Consultas
 import org.lighthousegames.logging.logging
 import srangeldev.config.Config
 import srangeldev.models.Entrenador
@@ -21,6 +20,26 @@ class Controller {
 
     fun cargarDatos(formato: String) {
         logger.debug { "Cargando datos" }
+        val filePath = constructFilePath(formato)
+        val inputFormat = FileFormat.valueOf(formato.trim())
+        service.importFromFile(filePath, inputFormat)
+    }
+
+    fun copiarDatos(formato: String) {
+        logger.debug { "Copiando datos" }
+        if (formato.isBlank()) {
+            println("El formato proporcionado está vacío. No se puede copiar.")
+            return
+        }
+        Config.configProperties.outputFormats.split(",").forEach {
+            val outputFormat = FileFormat.valueOf(it.trim())
+            if (outputFormat.name.equals(formato.trim(), ignoreCase = true)) {
+                service.exportToFile(Config.configProperties.dataDir, outputFormat)
+            }
+        }
+    }
+
+    private fun constructFilePath(formato: String): String {
         val dataDir = Paths.get(Config.configProperties.dataDir).toAbsolutePath().toString()
         val fileName = when (formato) {
             "CSV" -> "personal.csv"
@@ -28,19 +47,7 @@ class Controller {
             "JSON" -> "personal.json"
             else -> throw IllegalArgumentException("Formato no soportado: $formato")
         }
-        val filePath = Paths.get(dataDir, fileName).toString()
-        val inputFormat = FileFormat.valueOf(formato.trim())
-        service.importFromFile(filePath, inputFormat)
-    }
-
-    // En la función copiarDatos
-    fun copiarDatos() {
-        logger.debug { "Copiando datos" }
-        val outputFormats = Config.configProperties.outputFormats.split(",") // Corregido: outputFormats
-        outputFormats.forEach { formato ->
-            val outputFormat = FileFormat.valueOf(formato.trim())
-            service.exportToFile(Config.configProperties.dataDir, outputFormat) // Corregido: dataDir
-        }
+        return Paths.get(dataDir, fileName).toString()
     }
 
 
@@ -76,7 +83,8 @@ class Controller {
         val paisOrigen = readln()
         println("Introduce la especialización del entrenador")
         val especializacion = leerEspecializacion()
-        val entrenador = Entrenador(id, nombre, apellido, fechaNacimiento, fechaIncorporacion, salario, paisOrigen, especializacion)
+        val entrenador =
+            Entrenador(id, nombre, apellido, fechaNacimiento, fechaIncorporacion, salario, paisOrigen, especializacion)
         service.save(entrenador)
     }
 
@@ -109,7 +117,21 @@ class Controller {
         val goles = readln().toInt()
         println("Introduce los partidos jugados del jugador")
         val partidosJugados = readln().toInt()
-        val jugador = Jugador(id, nombre, apellido, fechaNacimiento, fechaIncorporacion, salario, paisOrigen, posicion, dorsal, altura, peso, goles, partidosJugados)
+        val jugador = Jugador(
+            id,
+            nombre,
+            apellido,
+            fechaNacimiento,
+            fechaIncorporacion,
+            salario,
+            paisOrigen,
+            posicion,
+            dorsal,
+            altura,
+            peso,
+            goles,
+            partidosJugados
+        )
         service.save(jugador)
     }
 
@@ -159,7 +181,21 @@ class Controller {
         val goles = readln().toInt()
         println("Introduce los partidos jugados del jugador")
         val partidosJugados = readln().toInt()
-        val jugador = Jugador(0, nombre, apellido, fechaNacimiento, fechaIncorporacion, salario, paisOrigen, posicion, dorsal, altura, peso, goles, partidosJugados)
+        val jugador = Jugador(
+            0,
+            nombre,
+            apellido,
+            fechaNacimiento,
+            fechaIncorporacion,
+            salario,
+            paisOrigen,
+            posicion,
+            dorsal,
+            altura,
+            peso,
+            goles,
+            partidosJugados
+        )
         return service.update(jugador.id, jugador) as Jugador
     }
 
@@ -184,7 +220,8 @@ class Controller {
         val paisOrigen = readln()
         println("Introduce la especialización del entrenador")
         val especializacion = leerEspecializacion()
-        val entrenador = Entrenador(0, nombre, apellido, fechaNacimiento, fechaIncorporacion, salario, paisOrigen, especializacion)
+        val entrenador =
+            Entrenador(0, nombre, apellido, fechaNacimiento, fechaIncorporacion, salario, paisOrigen, especializacion)
         return service.update(entrenador.id, entrenador) as Entrenador
     }
 
@@ -203,18 +240,6 @@ class Controller {
         } else {
             println("Miembro no encontrado.")
         }
-    }
-
-
-
-    /**
-     * Realiza consultas sobre los datos del personal.
-     */
-    fun realizarConsultas() {
-        logger.debug { "Realizando consultas" }
-        println("Realizando consultas")
-        val consultas = Consultas()
-        consultas.realizarConsultas()
     }
 
     /**

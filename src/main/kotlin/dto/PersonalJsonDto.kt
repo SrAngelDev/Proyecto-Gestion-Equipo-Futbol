@@ -17,23 +17,23 @@ data class PersonalJsonDto(
     @SerialName("fecha_incorporacion")
     val fechaIncorporacion: String,
     @SerialName("salario")
-    val salario: Double? = 0.0,
+    val salario: Double = 0.0,
     @SerialName("pais")
     val pais: String,
     @SerialName("rol")
-    val rol: String? = null,
+    val rol: String = "",
     @SerialName("especialidad")
-    val especializacion: String? = null,
+    val especializacion: String = "",
     @SerialName("posicion")
-    val posicion: String? = null,
+    val posicion: String = "",
     @SerialName("dorsal")
-    val dorsal: Int? = null,
+    val dorsal: Int? = 0,
     @SerialName("altura")
-    val altura: Double? = null,
+    val altura: Double? = 0.0,
     @SerialName("peso")
-    val peso: Double? = null,
+    val peso: Double? = 0.0,
     @SerialName("goles")
-    val goles: Int? = null,
+    val goles: Int? = 0,
     @SerialName("partidos_jugados")
-    val partidosJugados: Int? = null,
+    val partidosJugados: Int? = 0,
 )

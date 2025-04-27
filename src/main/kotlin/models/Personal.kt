@@ -11,6 +11,6 @@ abstract class Personal(
     val apellidos: String,
     val fechaNacimiento: LocalDate,
     val fechaIncorporacion: LocalDate,
-    val salario: Double?,
+    val salario: Double,
     val paisOrigen: String
 )

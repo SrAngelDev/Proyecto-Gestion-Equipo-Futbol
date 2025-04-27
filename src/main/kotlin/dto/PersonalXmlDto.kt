@@ -3,6 +3,7 @@ package srangeldev.dto
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import nl.adaptivity.xmlutil.serialization.XmlElement
+import org.lighthousegames.logging.logging
 
 @Serializable
 @SerialName("personal")
@@ -26,29 +27,29 @@ data class PersonalXmlDto(
     val fechaIncorporacion: String = "",
     @SerialName("salario")
     @XmlElement(true)
-    val salario: Double? = 0.0,
+    val salario: Double = 0.0,
     @SerialName("pais")
     @XmlElement(true)
     val pais: String = "",
     @SerialName("especialidad")
     @XmlElement(true)
-    val especialidad: String? = null,
+    val especialidad: String = "",
     @SerialName("posicion")
     @XmlElement(true)
-    val posicion: String? = null,
+    val posicion: String = "",
     @SerialName("dorsal")
     @XmlElement(true)
-    val dorsal: String? = null,
+    val dorsal: String = "",
     @SerialName("altura")
     @XmlElement(true)
-    val altura: Double? = null,
+    val altura: String = "",
     @SerialName("peso")
     @XmlElement(true)
-    val peso: Double? = null,
+    val peso: String = "",
     @SerialName("goles")
     @XmlElement(true)
-    val goles: Int? = null,
+    val goles: String = "",
     @SerialName("partidosJugados")
     @XmlElement(true)
-    val partidosJugados: Int? = null
+    val partidosJugados: String = ""
 )

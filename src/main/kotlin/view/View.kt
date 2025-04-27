@@ -18,13 +18,12 @@ class View {
         println("Bienvenido a la aplicación de Entrenadores")
         var opcion: Int
         do {
-            println("1. Cargar datos desde fichero según la especificación indicada.")
+            println("1. Cargar datos de los miembros del equipo.")
             println("2. Crear miembro del equipo.")
             println("3. Actualizar miembro de equipo.")
             println("4. Eliminar miembro del equipo")
             println("5. Copiar datos a fichero según la especificación realizada.")
-            println("6. Realizar consultas indicadas.")
-            println("7. Salir.")
+            println("6. Salir.")
 
             print("Seleccione una opción: ")
             opcion = readln().toInt()
@@ -35,10 +34,10 @@ class View {
                 3 -> actualizarMiembro()
                 4 -> eliminarMiembro()
                 5 -> copiarDatos()
-                6 -> realizarConsultas()
+                6 -> println("Saliendo de la aplicación...")
                 else -> println("Opción no válida.")
             }
-        } while (opcion != 7)
+        } while (opcion != 6)
     }
 
     /**
@@ -46,24 +45,11 @@ class View {
      */
     fun cargarDatos() {
         logger.debug { "Cargando datos" }
-        println("De qué formato quieres cargar los datos?")
-        var opcion: Int
-        do {
-            println("1. CSV")
-            println("2. XML")
-            println("3. JSON")
-            println("4. Salir")
-
-            print("Seleccione una opción: ")
-            opcion = readln().toInt()
-
-            when(opcion) {
-                1 -> cargarDatosCsv()
-                2 -> cargarDatosXml()
-                3 -> cargarDatosJson()
-                else -> println("Volviendo al menu principal.")
-            }
-        } while (opcion != 4)
+        println("Cargando datos de los miembros del equipo...")
+        cargarDatosCsv()
+        cargarDatosXml()
+        cargarDatosJson()
+        println("Datos cargados correctamente.")
     }
 
     private fun cargarDatosCsv() {
@@ -86,7 +72,29 @@ class View {
      */
     fun copiarDatos() {
         logger.debug { "Copiando datos" }
-        controller.copiarDatos()
+        println("¿A que quieres exportar los datos?")
+        println("1. CSV")
+        println("2. XML")
+        println("3. JSON")
+        print("Seleccione una opción: ")
+        val opcion = readln().toInt()
+        when (opcion) {
+            1 -> controller.copiarDatos("csv")
+            2 -> controller.copiarDatos("xml")
+            3 -> controller.copiarDatos("json")
+            else -> println("Opción no válida.")
+        }
+        println("Datos copiados correctamente.")
+    }
+
+    fun copiarDatosXML() {
+        logger.debug { "Copiando datos en formato XML" }
+
+    }
+
+    fun copiarDatosJSON() {
+        logger.debug { "Copiando datos en formato JSON" }
+
     }
 
     /**
@@ -111,16 +119,5 @@ class View {
     fun eliminarMiembro() {
         logger.debug { "Eliminando miembro" }
         controller.eliminarMiembro()
-    }
-
-
-
-
-    /**
-     * Manda al controlador realizar consultas.
-     */
-    fun realizarConsultas() {
-        logger.debug { "Realizando consultas" }
-        controller.realizarConsultas()
     }
 }
