@@ -8,6 +8,7 @@ import srangeldev.service.PersonalServiceImpl
 import srangeldev.storage.FileFormat
 import java.nio.file.Paths
 import java.time.LocalDate
+import java.time.LocalDateTime
 
 /**
  * Controlador principal para gestionar las operaciones relacionadas con el personal.
@@ -83,8 +84,12 @@ class Controller {
         val paisOrigen = readln()
         println("Introduce la especialización del entrenador")
         val especializacion = leerEspecializacion()
+        val createdAt = LocalDateTime.now()
+        val updatedAt = LocalDateTime.now()
         val entrenador =
-            Entrenador(id, nombre, apellido, fechaNacimiento, fechaIncorporacion, salario, paisOrigen, especializacion)
+            Entrenador(
+                id, nombre, apellido, fechaNacimiento, fechaIncorporacion, salario, paisOrigen, updatedAt, createdAt, especializacion
+            )
         service.save(entrenador)
     }
 
@@ -117,6 +122,8 @@ class Controller {
         val goles = readln().toInt()
         println("Introduce los partidos jugados del jugador")
         val partidosJugados = readln().toInt()
+        val createdAt = LocalDateTime.now()
+        val updatedAt = LocalDateTime.now()
         val jugador = Jugador(
             id,
             nombre,
@@ -125,6 +132,8 @@ class Controller {
             fechaIncorporacion,
             salario,
             paisOrigen,
+            createdAt,
+            updatedAt,
             posicion,
             dorsal,
             altura,
@@ -146,7 +155,7 @@ class Controller {
         when (miembro) {
             is Entrenador -> actualizarEntrenador()
             is Jugador -> actualizarJugador()
-            else -> throw kotlin.IllegalArgumentException("Miembro no encontrado.")
+            else -> throw IllegalArgumentException("Miembro no encontrado.")
         }
     }
 
@@ -181,6 +190,8 @@ class Controller {
         val goles = readln().toInt()
         println("Introduce los partidos jugados del jugador")
         val partidosJugados = readln().toInt()
+        val createdAt = LocalDateTime.now()
+        val updatedAt = LocalDateTime.now()
         val jugador = Jugador(
             0,
             nombre,
@@ -189,6 +200,8 @@ class Controller {
             fechaIncorporacion,
             salario,
             paisOrigen,
+            createdAt,
+            updatedAt,
             posicion,
             dorsal,
             altura,
@@ -220,8 +233,12 @@ class Controller {
         val paisOrigen = readln()
         println("Introduce la especialización del entrenador")
         val especializacion = leerEspecializacion()
+
+        val createdAt = LocalDateTime.now()
+        val updatedAt = LocalDateTime.now()
+
         val entrenador =
-            Entrenador(0, nombre, apellido, fechaNacimiento, fechaIncorporacion, salario, paisOrigen, especializacion)
+            Entrenador(0, nombre, apellido, fechaNacimiento, fechaIncorporacion, salario, paisOrigen, createdAt, updatedAt, especializacion)
         return service.update(entrenador.id, entrenador) as Entrenador
     }
 
