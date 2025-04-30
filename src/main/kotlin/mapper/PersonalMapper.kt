@@ -4,6 +4,7 @@ import srangeldev.dto.*
 import srangeldev.models.Entrenador
 import srangeldev.models.Jugador
 import java.time.LocalDate
+import java.time.LocalDateTime
 
 fun Entrenador.toCsvDto(): PersonalCsvDto {
     return PersonalCsvDto(
@@ -123,6 +124,8 @@ fun PersonalCsvDto.toEntrenador(): Entrenador {
         fechaIncorporacion = LocalDate.parse(this.fechaIncorporacion),
         salario = this.salario,
         paisOrigen = this.paisOrigen,
+        createdAt = LocalDateTime.now(),
+        updatedAt = LocalDateTime.now(),
         especializacion = especializacion
     )
 }
@@ -136,6 +139,8 @@ fun PersonalCsvDto.toJugador(): Jugador {
         fechaIncorporacion = LocalDate.parse(this.fechaIncorporacion),
         salario = this.salario,
         paisOrigen = this.paisOrigen,
+        createdAt = LocalDateTime.now(),
+        updatedAt = LocalDateTime.now(),
         posicion = Jugador.Posicion.valueOf(this.posicion ?: "DESCONOCIDO"),
         dorsal = this.dorsal.toInt(),
         altura = this.altura.toDouble(),
@@ -164,6 +169,8 @@ fun PersonalJsonDto.toEntrenador(): Entrenador {
         fechaIncorporacion = LocalDate.parse(this.fechaIncorporacion),
         salario = this.salario,
         paisOrigen = this.pais,
+        createdAt = LocalDateTime.now(),
+        updatedAt = LocalDateTime.now(),
         especializacion = especializacion
     )
 }
@@ -177,6 +184,8 @@ fun PersonalJsonDto.toJugador(): Jugador {
         fechaIncorporacion = LocalDate.parse(this.fechaIncorporacion),
         salario = this.salario,
         paisOrigen = this.pais,
+        createdAt = LocalDateTime.now(),
+        updatedAt = LocalDateTime.now(),
         posicion = Jugador.Posicion.valueOf(this.posicion ?: "DESCONOCIDO"),
         dorsal = this.dorsal?.toInt() ?: 0,
         altura = this.altura?.toDouble() ?: 0.0,
@@ -205,6 +214,8 @@ fun PersonalXmlDto.toEntrenador(): Entrenador {
         fechaIncorporacion = LocalDate.parse(this.fechaIncorporacion),
         salario = this.salario,
         paisOrigen = this.pais,
+        createdAt = LocalDateTime.now(),
+        updatedAt = LocalDateTime.now(),
         especializacion = especializacion
     )
 }
@@ -218,6 +229,8 @@ fun PersonalXmlDto.toJugador(): Jugador {
         fechaIncorporacion = LocalDate.parse(this.fechaIncorporacion),
         salario = this.salario,
         paisOrigen = this.pais,
+        createdAt = LocalDateTime.now(),
+        updatedAt = LocalDateTime.now(),
         posicion = Jugador.Posicion.valueOf(this.posicion ?: "DESCONOCIDO"),
         dorsal = this.dorsal.toInt(),
         altura = this.altura.toDouble(),
@@ -279,6 +292,8 @@ fun PersonalBinDto.toEntrenador(): Entrenador {
         fechaIncorporacion = LocalDate.parse(this.fechaIncorporacion),
         salario = this.salario,
         paisOrigen = this.pais,
+        createdAt = LocalDateTime.now(),
+        updatedAt = LocalDateTime.now(),
         especializacion = especializacion
     )
 }
@@ -292,6 +307,8 @@ fun PersonalBinDto.toJugador(): Jugador {
         fechaIncorporacion = LocalDate.parse(this.fechaIncorporacion),
         salario = this.salario,
         paisOrigen = this.pais,
+        createdAt = LocalDateTime.now(),
+        updatedAt = LocalDateTime.now(),
         posicion = Jugador.Posicion.valueOf(this.posicion ?: "DESCONOCIDO"),
         dorsal = this.dorsal ?: 0,
         altura = this.altura ?: 0.0,

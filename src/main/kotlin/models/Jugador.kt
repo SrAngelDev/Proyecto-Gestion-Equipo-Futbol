@@ -1,6 +1,7 @@
 package srangeldev.models
 
 import java.time.LocalDate
+import java.time.LocalDateTime
 
 /**
  * Clase que representa a un jugador.
@@ -13,13 +14,15 @@ class Jugador(
     fechaIncorporacion: LocalDate,
     salario: Double,
     paisOrigen: String,
+    createdAt: LocalDateTime,
+    updatedAt: LocalDateTime,
     val posicion: Posicion,
     val dorsal: Int,
     val altura: Double,
     val peso: Double,
     val goles: Int,
     val partidosJugados: Int
-): Personal(id, nombre, apellidos, fechaNacimiento, fechaIncorporacion, salario, paisOrigen) {
+): Personal(id, nombre, apellidos, fechaNacimiento, fechaIncorporacion, salario, paisOrigen, createdAt, updatedAt) {
     enum class Posicion {
         PORTERO,
         DEFENSA,

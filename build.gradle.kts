@@ -11,6 +11,9 @@ repositories {
 }
 
 dependencies {
+    // BBDD
+    implementation("org.xerial:sqlite-jdbc:3.49.1.0")
+    implementation("org.mybatis:mybatis:3.5.19") // Scripts de bases de datos
     // Librería para logging
     implementation("org.lighthousegames:logging:1.5.0")
     implementation("ch.qos.logback:logback-classic:1.5.12")
