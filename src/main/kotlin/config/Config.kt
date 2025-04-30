@@ -30,7 +30,7 @@ package srangeldev.config
                     dataDir = dataDir,
                     backupDir = backupDir,
                     inputFormats = properties.getProperty("input.formats", "CSV,XML,JSON"),
-                    outputFormats = properties.getProperty("output.formats", "CSV,XML,JSON,BIN"),
+                    outputFormats = properties.getProperty("output.formats", "CSV,XML,JSON"),
                     databaseUrl = properties.getProperty("database.url", "jdbc:sqlite:equipo.db"),
                     databaseInitTables = properties.getProperty("database.init.tables", "true").toBoolean(),
                     databaseInitData = properties.getProperty("database.init.data", "true").toBoolean(),

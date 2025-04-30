@@ -14,68 +14,80 @@ import java.time.LocalDateTime
  */
 class PersonalRespositoryImpl : PersonalRepository {
     private val logger = logging()
-    private val personal = mutableListOf<Personal>()
+    private val personal = mutableMapOf<Int, Personal>()
 
     init {
         logger.debug { "Inicializando repositorio de personal" }
     }
 
+    /**
+     * Obtiene una lista de todos los entrenadores.
+     *
+     * @return Una lista de objetos Entrenador.
+     */
     private fun getEntrenadores(): List<Entrenador> {
-        val sql = "SELECT * FROM Entrenadores"
+        val sql = """
+            SELECT p.*, e.especializacion 
+            FROM Personal p
+            INNER JOIN Entrenadores e ON p.id = e.id
+            WHERE p.tipo = 'ENTRENADOR'
+        """.trimIndent()
+
         DataBaseManager.use { db ->
             val res = db.connection?.prepareStatement(sql)!!.executeQuery()
             while (res.next()) {
-                val entrenadores = Entrenador(
+                val entrenador = Entrenador(
                     id = res.getInt("id"),
                     nombre = res.getString("nombre"),
                     apellidos = res.getString("apellidos"),
-                    fechaNacimiento = res.getDate("fechaNacimiento").toLocalDate(),
-                    fechaIncorporacion = res.getDate("fechaIncorporacion").toLocalDate(),
+                    fechaNacimiento = res.getDate("fecha_nacimiento").toLocalDate(),
+                    fechaIncorporacion = res.getDate("fecha_incorporacion").toLocalDate(),
                     salario = res.getDouble("salario"),
-                    paisOrigen = res.getString("paisOrigen"),
+                    paisOrigen = res.getString("pais_origen"),
                     especializacion = Entrenador.Especializacion.valueOf(res.getString("especializacion")),
-                    createdAt = LocalDateTime.parse(res.getString("createdAt")),
-                    updatedAt = LocalDateTime.parse(res.getString("updatedAt"))
+                    createdAt = LocalDateTime.now(),
+                    updatedAt = LocalDateTime.now()
                 )
-                personal.add(entrenadores)
+                personal[entrenador.id] = entrenador
             }
         }
-        return personal.filterIsInstance<Entrenador>()
+        return personal.values.filterIsInstance<Entrenador>()
     }
 
     private fun getJugadores(): List<Jugador> {
-        val sql = "SELECT * FROM Jugadores"
+        val sql = """
+            SELECT p.*, j.posicion, j.dorsal, j.altura, j.peso, j.goles, j.partidos_jugados 
+            FROM Personal p
+            INNER JOIN Jugadores j ON p.id = j.id
+            WHERE p.tipo = 'JUGADOR'
+        """.trimIndent()
+
         DataBaseManager.use { db ->
             val res = db.connection?.prepareStatement(sql)!!.executeQuery()
             while (res.next()) {
-                val jugadores = Jugador(
+                val jugador = Jugador(
                     id = res.getInt("id"),
                     nombre = res.getString("nombre"),
                     apellidos = res.getString("apellidos"),
-                    fechaNacimiento = res.getDate("fechaNacimiento").toLocalDate(),
-                    fechaIncorporacion = res.getDate("fechaIncorporacion").toLocalDate(),
+                    fechaNacimiento = res.getDate("fecha_nacimiento").toLocalDate(),
+                    fechaIncorporacion = res.getDate("fecha_incorporacion").toLocalDate(),
                     salario = res.getDouble("salario"),
-                    paisOrigen = res.getString("paisOrigen"),
+                    paisOrigen = res.getString("pais_origen"),
                     posicion = Jugador.Posicion.valueOf(res.getString("posicion")),
                     dorsal = res.getInt("dorsal"),
                     altura = res.getDouble("altura"),
                     peso = res.getDouble("peso"),
                     goles = res.getInt("goles"),
-                    partidosJugados = res.getInt("partidosJugados"),
-                    createdAt = LocalDateTime.parse(res.getString("createdAt")),
-                    updatedAt = LocalDateTime.parse(res.getString("updatedAt"))
+                    partidosJugados = res.getInt("partidos_jugados"),
+                    createdAt = LocalDateTime.now(),
+                    updatedAt = LocalDateTime.now()
                 )
-                personal.add(jugadores)
+                personal[jugador.id] = jugador
             }
         }
-        return personal.filterIsInstance<Jugador>()
+        return personal.values.filterIsInstance<Jugador>()
     }
 
-    /**
-     * Obtiene una lista de todos los objetos personal.
-     *
-     * @return Una lista de objetos personal.
-     */
     override fun getAll(): List<Personal> {
         logger.debug { "Obteniendo a todo el personal" }
         if (personal.isEmpty()) {
@@ -83,7 +95,7 @@ class PersonalRespositoryImpl : PersonalRepository {
             getEntrenadores()
             getJugadores()
         }
-        return personal
+        return personal.values.toList()
     }
 
     /**
@@ -152,80 +164,98 @@ class PersonalRespositoryImpl : PersonalRepository {
         logger.debug { "Guardando personal: $entidad" }
         val timeStamp = LocalDateTime.now()
 
-        val sql = when (entidad) {
-            is Jugador -> """
-        INSERT INTO Personal (nombre, apellidos, fecha_nacimiento, fecha_incorporacion, salario, pais_origen, tipo, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, 'JUGADOR', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
-        INSERT INTO Jugadores (id, posicion, dorsal, altura, peso, goles, partidos_jugados) VALUES (last_insert_rowid(), ?, ?, ?, ?, ?, ?);
-        """.trimIndent()
-
-            is Entrenador -> """
-        INSERT INTO Personal (nombre, apellidos, fecha_nacimiento, fecha_incorporacion,salario, pais_origen, tipo, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, 'ENTRENADOR', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
-        INSERT INTO Entrenadores (id, especializacion) VALUES (last_insert_rowid(), ?);
-        """.trimIndent()
-            else -> throw IllegalArgumentException("Tipo desconocido de Personal")
-        }
-
         DataBaseManager.use { db ->
-            val preparedStatement = db.connection?.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)!!
-            preparedStatement.setString(1, entidad.nombre)
-            preparedStatement.setString(2, entidad.apellidos)
-            preparedStatement.setDate(3, java.sql.Date.valueOf(entidad.fechaNacimiento))
-            preparedStatement.setDate(4, java.sql.Date.valueOf(entidad.fechaIncorporacion))
-            preparedStatement.setDouble(5, entidad.salario)
-            preparedStatement.setString(6, entidad.paisOrigen)
+            val connection = db.connection ?: throw IllegalStateException("Conexión a la base de datos no disponible")
 
-            if (entidad is Jugador) {
-                preparedStatement.setString(7, entidad.posicion.name)
-                preparedStatement.setInt(8, entidad.dorsal)
-                preparedStatement.setDouble(9, entidad.altura)
-                preparedStatement.setDouble(10, entidad.peso)
-                preparedStatement.setInt(11, entidad.goles)
-                preparedStatement.setInt(12, entidad.partidosJugados)
-            } else if (entidad is Entrenador) {
-                preparedStatement.setString(7, entidad.especializacion.name)
+            // Primero insertamos en la tabla Personal
+            val sqlPersonal = """
+                                INSERT INTO Personal (nombre, apellidos, fecha_nacimiento, fecha_incorporacion, 
+                                salario, pais_origen, tipo, created_at, updated_at) 
+                                VALUES (?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+                            """.trimIndent()
+
+            val preparedStatementPersonal = connection.prepareStatement(sqlPersonal, Statement.RETURN_GENERATED_KEYS)
+            preparedStatementPersonal.apply {
+                setString(1, entidad.nombre)
+                setString(2, entidad.apellidos)
+                setDate(3, java.sql.Date.valueOf(entidad.fechaNacimiento))
+                setDate(4, java.sql.Date.valueOf(entidad.fechaIncorporacion))
+                setDouble(5, entidad.salario)
+                setString(6, entidad.paisOrigen)
+                setString(7, if (entidad is Jugador) "JUGADOR" else "ENTRENADOR")
             }
+            preparedStatementPersonal.executeUpdate()
 
-            preparedStatement.executeUpdate()
-            val generatedId = preparedStatement.generatedKeys.let {
+            val generatedId = preparedStatementPersonal.generatedKeys.let {
                 it.next()
                 it.getInt(1)
             }
 
+            // Luego insertamos en la tabla específica
             when (entidad) {
-                is Jugador -> Jugador(
-                    id = generatedId,
-                    nombre = entidad.nombre,
-                    apellidos = entidad.apellidos,
-                    fechaNacimiento = entidad.fechaNacimiento,
-                    fechaIncorporacion = entidad.fechaIncorporacion,
-                    salario = entidad.salario,
-                    paisOrigen = entidad.paisOrigen,
-                    posicion = entidad.posicion,
-                    dorsal = entidad.dorsal,
-                    altura = entidad.altura,
-                    peso = entidad.peso,
-                    goles = entidad.goles,
-                    partidosJugados = entidad.partidosJugados,
-                    createdAt = timeStamp,
-                    updatedAt = timeStamp
-                )
+                is Jugador -> {
+                    val sqlJugador = """
+                                        INSERT INTO Jugadores (id, posicion, dorsal, altura, peso, goles, partidos_jugados) 
+                                        VALUES (?, ?, ?, ?, ?, ?, ?)
+                                    """.trimIndent()
 
-                is Entrenador -> Entrenador(
-                    id = generatedId,
-                    nombre = entidad.nombre,
-                    apellidos = entidad.apellidos,
-                    fechaNacimiento = entidad.fechaNacimiento,
-                    fechaIncorporacion = entidad.fechaIncorporacion,
-                    salario = entidad.salario,
-                    paisOrigen = entidad.paisOrigen,
-                    especializacion = entidad.especializacion,
-                    createdAt = timeStamp,
-                    updatedAt = timeStamp
-                )
+                    connection.prepareStatement(sqlJugador).apply {
+                        setInt(1, generatedId)
+                        setString(2, entidad.posicion.name)
+                        setInt(3, entidad.dorsal)
+                        setDouble(4, entidad.altura)
+                        setDouble(5, entidad.peso)
+                        setInt(6, entidad.goles)
+                        setInt(7, entidad.partidosJugados)
+                        executeUpdate()
+                    }
+
+                    Jugador(
+                        id = generatedId,
+                        nombre = entidad.nombre,
+                        apellidos = entidad.apellidos,
+                        fechaNacimiento = entidad.fechaNacimiento,
+                        fechaIncorporacion = entidad.fechaIncorporacion,
+                        salario = entidad.salario,
+                        paisOrigen = entidad.paisOrigen,
+                        posicion = entidad.posicion,
+                        dorsal = entidad.dorsal,
+                        altura = entidad.altura,
+                        peso = entidad.peso,
+                        goles = entidad.goles,
+                        partidosJugados = entidad.partidosJugados,
+                        createdAt = timeStamp,
+                        updatedAt = timeStamp
+                    )
+                }
+
+                is Entrenador -> {
+                    val sqlEntrenador = "INSERT INTO Entrenadores (id, especializacion) VALUES (?, ?)"
+
+                    connection.prepareStatement(sqlEntrenador).apply {
+                        setInt(1, generatedId)
+                        setString(2, entidad.especializacion.name)
+                        executeUpdate()
+                    }
+
+                    Entrenador(
+                        id = generatedId,
+                        nombre = entidad.nombre,
+                        apellidos = entidad.apellidos,
+                        fechaNacimiento = entidad.fechaNacimiento,
+                        fechaIncorporacion = entidad.fechaIncorporacion,
+                        salario = entidad.salario,
+                        paisOrigen = entidad.paisOrigen,
+                        especializacion = entidad.especializacion,
+                        createdAt = timeStamp,
+                        updatedAt = timeStamp
+                    )
+                }
 
                 else -> throw IllegalArgumentException("Tipo desconocido de Personal")
             }
         }
+        // Devolvemos el objeto personal guardado
         return entidad
     }
 
